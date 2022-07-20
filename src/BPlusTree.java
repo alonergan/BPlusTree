@@ -175,7 +175,7 @@ class BPlusTree {
         return this;
     }
 
-    private BPlusTreeNode delete2 (BPlusTreeNode current, long studentId) {
+    private BPlusTreeNode delete2 (BPlusTreeNode parent, BPlusTreeNode current, long studentId, KVPair oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {
@@ -187,7 +187,7 @@ class BPlusTree {
                     break;
                 }
             }
-            delete2(current.children[i], studentId); // recursive delete
+            delete2(current, current.children[i], studentId, null); // recursive delete
         }
         return null;
     }
@@ -206,7 +206,7 @@ class BPlusTree {
             return false;
         }
         else {
-            delete2(this.root, studentId);
+            delete2(null, this.root, studentId, null);
         }
         return true;
     }
