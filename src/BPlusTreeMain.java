@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Random;
 
 /**
  * Main Application.
@@ -33,6 +34,8 @@ public class BPlusTreeMain {
             bTree.insert(s);
         }
 
+        Random rand = new Random();
+
         /** Start reading the operations now from input file*/
         try {
             while (scan.hasNextLine()) {
@@ -51,8 +54,13 @@ public class BPlusTreeMain {
                             String major = s2.next();
                             String level = s2.next();
                             int age = Integer.parseInt(s2.next());
-                            long recordID = Long.parseLong(s2.next());
-
+                            long recordID;
+                            if (s2.hasNext()) {
+                                recordID = Long.parseLong(s2.next());
+                            }
+                            else {
+                                recordID = rand.nextInt(100);
+                            }
                             Student s = new Student(studentId, age, studentName, major, level, recordID);
                             bTree.insert(s);
                             totalStudents++;
