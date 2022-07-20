@@ -189,6 +189,24 @@ class BPlusTree {
         return this;
     }
 
+    private BPlusTreeNode delete2 (BPlusTreeNode parent, BPlusTreeNode current, long studentId, KVPair oldchildentry) {
+        
+        // if node pointer is a non leaf 
+        if (!current.leaf) {
+            // choose subtree
+            int i = 0;
+            // logic: i will be the location of the child to use
+            for (i = 0; i < current.size; i++) {
+                if (studentId < current.keyValues[i].key) {
+                    break;
+                }
+            }
+            delete2(current, current.children[i], studentId, null); // recursive delete
+        }
+        return null;
+    }
+
+
     boolean delete(long studentId) {
         /*
          * TODO:
@@ -196,6 +214,14 @@ class BPlusTree {
          * Also, delete in student.csv after deleting in B+Tree, if it exists.
          * Return true if the student is deleted successfully otherwise, return false.
          */
+
+        // cant delete here
+        if (this.root == null) {
+            return false;
+        }
+        else {
+            delete2(null, this.root, studentId, null);
+        }
         return true;
     }
 
