@@ -20,13 +20,10 @@ class BPlusTree {
     final private int t;
     final private int max;
 
-    final private int min;
-
     BPlusTree(int t) {
         this.root = null;
         this.t = t;
         this.max = 2 * t; // should this be 2 * t?
-        this.min = t;
     }
 
     long search(long studentId) {
@@ -91,22 +88,39 @@ class BPlusTree {
                 // If node has space insert key
                 if (node.size < max) {
                     node.keyValues[node.size] = newChildEntry.keyValue;
-                    node.children[node.size] = newChildEntry.child;
+                    node.children[node.numChildren] = newChildEntry.child;
+                    node.numChildren++;
+                    node.size++;
                     newChildEntry = null;
                     return newChildEntry;
                 }
                 // If no space in interior node, must split
                 else {
                     BPlusTreeNode tmp = new BPlusTreeNode(t, true);     // Copy of array values
-                    BPlusTreeNode node2 = new BPlusTreeNode(t, true);   // Right node of split node
+                    BPlusTreeNode node2 = new BPlusTreeNode(t, false);   // Right node of split node
                     System.arraycopy(node.keyValues, 0, tmp.keyValues, 0, node.keyValues.length); // Copy vals into tmp
+                    System.arraycopy(node.children, 0, tmp.children, 0, node.children.length);
                     node.clearKeys(); // Clear current node
+                    node.clearChildren();
+
+                    // Fill left node
                     System.arraycopy(tmp.keyValues, 0, node.keyValues, 0, t); // First t entries and t+1 children stay
                     System.arraycopy(tmp.children, 0, node.children, 0, t + 1);
                     node.size = t;
+                    node.numChildren = t+1;
+
+                    // Fill right node
                     System.arraycopy(tmp.keyValues, t, node2.keyValues, 0, tmp.keyValues.length - t); // Rest go into split node
                     System.arraycopy(tmp.children, t + 1, node2.children, 0, tmp.children.length - (t + 1));
                     node2.size = tmp.keyValues.length - t;
+                    node2.numChildren = tmp.children.length - (t+1);
+
+                    // Add newChildEntry to parent
+                    node2.keyValues[node2.size] = newChildEntry.keyValue; // Add new key
+                    node2.children[node2.numChildren] = newChildEntry.child; // Add child reference
+                    node2.size++;
+                    node2.numChildren++;
+
                     newChildEntry = new newChildEntry(node2.keyValues[0], node2);
                     // If root node was just split, revise tree
                     if (node == root) {
@@ -114,6 +128,7 @@ class BPlusTree {
                         newRoot.keyValues[0] = newChildEntry.keyValue;
                         newRoot.children[0] = node;
                         newRoot.children[1] = newChildEntry.child;
+                        newRoot.numChildren = 2;
                         newRoot.size = 1;
                         this.root = newRoot;
                     }
@@ -143,8 +158,6 @@ class BPlusTree {
                 node.size = t;
                 leaf2.size = tmp.length - t;
                 node.next = leaf2;
-                // TODO: Link leaf1 to next?
-                // Sort nodes we just split
 
                 // If root node was just split, revise tree
                 if (node == root) {
@@ -152,6 +165,7 @@ class BPlusTree {
                     newRoot.keyValues[0] = newChildEntry.keyValue;
                     newRoot.children[0] = node;
                     newRoot.children[1] = newChildEntry.child;
+                    newRoot.numChildren = 2;
                     newRoot.size = 1;
                     this.root = newRoot;
                 }

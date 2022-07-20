@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5c2f328d-c619-4b76-9456-ccfc11b1dd3a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BPlusTree.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/BPlusTreeMain.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/BPlusTreeNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Student.java" afterDir="false" />
+    <list default="true" id="5c2f328d-c619-4b76-9456-ccfc11b1dd3a" name="Changes" comment="Fixed Insert algorithm to represent correct B+ tree structure. (Structure of tree was incorrect and did not handle interior node splitting)">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Student_test.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlusTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlusTreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTreeNode.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,12 +34,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="BPlusTreeMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="BPlusTreeMain" />
@@ -82,24 +76,35 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Fixed Insert algorithm to represent correct B+ tree structure. (Structure of tree was incorrect and did not handle interior node splitting)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Insert algorithm to represent correct B+ tree structure. (Structure of tree was incorrect and did not handle interior node splitting)" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
-          <line>187</line>
+          <line>201</line>
           <properties class="BPlusTree" method="print">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/BPlusTreeMain.java</url>
-          <line>32</line>
-          <option name="timeStamp" value="12" />
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="((BPlusTree)this).root.children[0].next.keyValues[1]" custom="BPlusTree" />
+        <watch expression="((BPlusTree)this).root.children[1].children" custom="BPlusTree" />
+        <watch expression="((BPlusTree)this).root.children" custom="BPlusTree" />
+        <watch expression="((BPlusTree)this).root.keyValues" custom="BPlusTree" />
+        <watch expression="((BPlusTree)this).root.children[1].children[1]" custom="BPlusTree" />
+        <watch expression="((BPlusTree)this).root.keyValues" custom="BPlusTree" />
+        <watch expression="((BPlusTree)this).root.children[1].children[1]" custom="BPlusTree" />
+        <watch expression="((BPlusTree)this).root.children[6].children" custom="BPlusTree" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
