@@ -214,8 +214,8 @@ class BPlusTree {
                 // NOTE: I am assuming that the keyval array is properly ordered/filled in
                 // with null vals only at the end of the array and not in the middle
 
-                // NOTE: I am also assuming that the children array was already updated
-                // in the previous recursion (when node M was discarded)
+                // current.children array is updated here too (always the right side M deleted
+                // in the recursion)
 
                 for (i = 0; i< current.size; i++) {
                     if (current.keyValues[i].key == oldchildentry.key) {
@@ -224,11 +224,13 @@ class BPlusTree {
                     // edge case: deleting last entry/child in array
                     if (i == current.size-1) {
                         current.keyValues[i] = null;
+                        current.children[i+1] = null;
                         break;
                     }
                     //update values in array
                     if ((found == true) && (i != current.size-1)) {
                         current.keyValues[i] = current.keyValues[i+1];
+                        current.children[i+1] = current.children[i+2];
                     }
                 }
                 current.size--;
@@ -240,16 +242,16 @@ class BPlusTree {
                 }
                 // else: get a sibling of current (Algo states we can use parent pointer to find sibling)
                 else {
-                    // start proc to find s
+                    // redistribution have to make changes to the parent.children
+                    // will always redistribute evenly 
+                    // hueristic/strategy: try redistribution first
+                    // search for redistribution existence: done in redistfind helper
+
                     int j =0;
                     // first find current in parent.children
                     while(current != parent.children[j]){
                         j++;
                     }
-                    // redistribution have to make changes to the parent.children
-                    // will always redistribute evenly 
-                    // hueristic/strategy: try redistribution first
-                    // search for redist existence: done in redistfind helper
 
                     int redistributorIndex = redistFind(j, parent);
                     if(redistributorIndex != -1) { // if redistribution exists
