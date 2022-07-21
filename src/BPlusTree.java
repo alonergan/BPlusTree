@@ -197,7 +197,7 @@ class BPlusTree {
         return this;
     }
 
-    BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
+    KVPair deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, KVPair oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {
@@ -225,20 +225,22 @@ class BPlusTree {
                 // current.children array is updated here too (always the right side M deleted
                 // in the recursion so i + 1)
 
-                for (i = 0; i< current.numChildren; i++) {
-                    if (current.children[i] == oldchildentry) {
+                for (i = 0; i< current.size; i++) {
+                    if (current.keyValues[i].key == oldchildentry.key) {
                         found = true;
                     }
                     // edge case: deleting last entry/child in array
-                    if (i == current.numChildren-1) {
-                        current.children[i] = null;
+                    if (i == current.size-1) {
+                        current.keyValues[i] = null;
                         break;
                     }
                     //update values in array
-                    if ((found == true) && (i != current.numChildren-1)) {
-                        current.children[i] = current.children[i+1];
+                    if ((found == true) && (i != current.size-1)) {
+                        current.keyValues[i] = current.keyValues[i+1];
+                        current.children[i+1] = current.children[i+2];
                     }
                 }
+                current.size--;
                 current.numChildren--;
                 // now check min occupancy
                 // if current (N in algo) has entries to spare
@@ -276,11 +278,27 @@ class BPlusTree {
                         // merge current and random sibling: strategy: choose j-1 for index of sibling in parent
                         // unless j = 0 then choose j+1
                         if (j!= 0) {
-                            oldchildentry = parent.children[j];
-
+                            KVPair tmp = oldchildentry;
+                            oldchildentry = parent.keyValues[j-1];
+                            //pull splitting key into node on left
+                            parent.children[j-1].keyValues[this.t] = parent.keyValues[j-1];
+                            // find index of temporary oldchildentry
+                            int p = 0;
+                            while(tmp != parent.children[j].keyValues[p]){
+                                p++;
+                            }
+                            //update child array 
+                            parent.children[j-1].children[this.t+1] = parent.children[j].children[p];
+                            // move entries from m to node on the left
+                            for (i=0; i < parent.children[j].numChildren; i++) {
+                                parent.children[j-1].keyValues[this.t+1+i] = parent.children[j].keyValues[i];
+                                parent.children[j-1].children[this.t+2+i] = parent.children[j].children[i+1];
+                            }
+                            parent.children[j] = null;
+                            return oldchildentry;
                         }
                         else {
-                            oldchildentry = parent.children[j+1];
+                            oldchildentry = parent.keyValues[j];
                         }
                     }
                 }
