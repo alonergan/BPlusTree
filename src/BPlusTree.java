@@ -238,9 +238,13 @@ class BPlusTree {
                     oldchildentry = null;
                     return oldchildentry;
                 }
-                // else: get a sibling of current (hueristic take )
+                // else: get a sibling of current (hueristic use current.next)
                 else {
+                    // redistribution have to make changes to the parent.children
+                    // redistribute evenly amongst even number 2*t of max pairs
+                    if(current.next.size > this.t) {
 
+                    }
                 }
             }
         }
