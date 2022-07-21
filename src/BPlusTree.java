@@ -196,7 +196,7 @@ class BPlusTree {
         return this;
     }
 
-    KVPair deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, KVPair oldchildentry) {
+    BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {
@@ -224,22 +224,20 @@ class BPlusTree {
                 // current.children array is updated here too (always the right side M deleted
                 // in the recursion so i + 1)
 
-                for (i = 0; i< current.size; i++) {
-                    if (current.keyValues[i].key == oldchildentry.key) {
+                for (i = 0; i< current.numChildren; i++) {
+                    if (current.children[i] == oldchildentry) {
                         found = true;
                     }
                     // edge case: deleting last entry/child in array
-                    if (i == current.size-1) {
-                        current.keyValues[i] = null;
+                    if (i == current.numChildren-1) {
+                        current.children[i] = null;
                         break;
                     }
                     //update values in array
-                    if ((found == true) && (i != current.size-1)) {
-                        current.keyValues[i] = current.keyValues[i+1];
-                        current.children[i+1] = current.children[i+2];
+                    if ((found == true) && (i != current.numChildren-1)) {
+                        current.children[i] = current.children[i+1];
                     }
                 }
-                current.size--;
                 current.numChildren--;
                 // now check min occupancy
                 // if current (N in algo) has entries to spare
@@ -277,10 +275,11 @@ class BPlusTree {
                         // merge current and random sibling: strategy: choose j-1 for index of sibling in parent
                         // unless j = 0 then choose j+1
                         if (j!= 0) {
-                            oldchildentry = parent.keyValues[j-1];
+                            oldchildentry = parent.children[j];
+
                         }
                         else {
-                            oldchildentry = parent.keyValues[j];
+                            oldchildentry = parent.children[j+1];
                         }
                     }
                 }
