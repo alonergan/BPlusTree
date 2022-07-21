@@ -196,7 +196,7 @@ class BPlusTree {
         return this;
     }
 
-    KVPair deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, KVPair oldchildentry) {
+    BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {
@@ -218,14 +218,10 @@ class BPlusTree {
                 // remove oldchild entry from N (find it, then remove it, then update keys and children)
                 boolean found = false;
 
-                // NOTE: I am assuming that the keyval array is properly ordered/filled in
-                // with null vals only at the end of the array and not in the middle
+                // current.children array is updated here
 
-                // current.children array is updated here too (always the right side M deleted
-                // in the recursion so i + 1)
-
-                for (i = 0; i< current.size; i++) {
-                    if (current.keyValues[i].key == oldchildentry.key) {
+                for (i = 0; i< current.numChildren; i++) {
+                    if (current.children[i] == oldchildentry) {
                         found = true;
                     }
                     // edge case: deleting last entry/child in array
@@ -248,6 +244,7 @@ class BPlusTree {
                     return oldchildentry;
                 }
                 // else: get a sibling of current (Algo states we can use parent pointer to find sibling)
+
                 else {
                     // redistribution have to make changes to the parent.children
                     // will always redistribute evenly 
@@ -261,62 +258,6 @@ class BPlusTree {
                     }
 
                     int redistributorIndex = redistFind(j, parent);
-                    if(redistributorIndex != -1) { // if redistribution exists
-                        // redistribute
-                        KVPair entry_to_move = parent.children[redistributorIndex].keyValues[this.t];
-                        // slot to fill in current
-                        current.keyValues[this.t-1] = entry_to_move;
-                        current.children[this.t] = parent.children[redistributorIndex].children[this.t+1];
-                        // delete entry in redistributor
-                        parent.children[redistributorIndex].keyValues[this.t] = null;
-                        parent.children[redistributorIndex].children[this.t+1] = null;
-                        oldchildentry = null;
-                        return oldchildentry;
-                    }
-                    else {
-                        // merge current and random sibling: strategy: choose j-1 for index of sibling in parent
-                        // unless j = 0 then choose j+1
-                        if (j!= 0) {
-                            KVPair tmp = oldchildentry;
-                            oldchildentry = parent.keyValues[j-1];
-                            //pull splitting key into node on left
-                            parent.children[j-1].keyValues[this.t] = parent.keyValues[j-1];
-                            // find index of temporary oldchildentry
-                            int p = 0;
-                            while(tmp != parent.children[j].keyValues[p]){
-                                p++;
-                            }
-                            //update child array 
-                            parent.children[j-1].children[this.t+1] = parent.children[j].children[p];
-                            // move entries from m to node on the left
-                            for (i=0; i < parent.children[j].numChildren; i++) {
-                                parent.children[j-1].keyValues[this.t+1+i] = parent.children[j].keyValues[i];
-                                parent.children[j-1].children[this.t+2+i] = parent.children[j].children[i+1];
-                            }
-                            parent.children[j] = null;
-                            return oldchildentry;
-                        }
-                        else {
-                            KVPair tmp = oldchildentry;
-                            oldchildentry = parent.keyValues[j];
-                            //pull splitting key into node on left
-                            parent.children[j-1].keyValues[this.t] = parent.keyValues[j-1];
-                            // find index of temporary oldchildentry
-                            int p = 0;
-                            while(tmp != parent.children[j].keyValues[p]){
-                                p++;
-                            }
-                            //update child array 
-                            parent.children[j-1].children[this.t+1] = parent.children[j].children[p];
-                            // move entries from m to node on the left
-                            for (i=0; i < parent.children[j+1].numChildren; i++) {
-                                parent.children[j].keyValues[this.t+1+i] = parent.children[j+1].keyValues[i];
-                                parent.children[j].children[this.t+2+i] = parent.children[j+1].children[i+1];
-                            }
-                            parent.children[j+1] = null;
-                            return oldchildentry;
-                        }
-                    }
                 }
             }
         }
