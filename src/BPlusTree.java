@@ -75,7 +75,7 @@ class BPlusTree {
         if (!node.leaf) {
             // Choose subtree and recursively call method
             int i = 0;
-            while (i < node.size && entry.key > node.keyValues[i].key) {
+            while (i < node.size && entry.key >= node.keyValues[i].key) {
                 i++;
             }
             newChildEntry = insertHelper(node.children[i], entry, newChildEntry);
@@ -197,7 +197,7 @@ class BPlusTree {
         return this;
     }
 
-    BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
+    KVPair deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, KVPair oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {
@@ -216,32 +216,98 @@ class BPlusTree {
             }
             // we merged, (discarded child node) need to update rest of tree
             else {
-                // remove oldchild entry from N (find it, then remove it) (done in for loop)
+                // remove oldchild entry from N (find it, then remove it, then update keys and children)
                 boolean found = false;
-                for (i = 0; i< current.numChildren; i++) {
-                    // NOTE: I am assuming that the children array is properly ordered/filled in
-                    // with null vals only at the end of the array and not in the middle
-                    if (current.children[i] == oldchildentry) {
+
+                // NOTE: I am assuming that the keyval array is properly ordered/filled in
+                // with null vals only at the end of the array and not in the middle
+
+                // current.children array is updated here too (always the right side M deleted
+                // in the recursion so i + 1)
+
+                for (i = 0; i< current.size; i++) {
+                    if (current.keyValues[i].key == oldchildentry.key) {
                         found = true;
                     }
-                    // edge case: deleting last child in array
-                    if (i == current.numChildren-1) {
-                        current.children[i] = null;
+                    // edge case: deleting last entry/child in array
+                    if (i == current.size-1) {
+                        current.keyValues[i] = null;
                         break;
                     }
                     //update values in array
-                    if ((found == true) && (i != current.numChildren-1)) {
-                        current.children[i] = current.children[i+1];
+                    if ((found == true) && (i != current.size-1)) {
+                        current.keyValues[i] = current.keyValues[i+1];
+                        current.children[i+1] = current.children[i+2];
                     }
                 }
+                current.size--;
                 current.numChildren--;
                 // now check min occupancy
-                
+                // if current (N in algo) has entries to spare
+                if (current.size > this.t) {
+                    oldchildentry = null;
+                    return oldchildentry;
+                }
+                // else: get a sibling of current (Algo states we can use parent pointer to find sibling)
+                else {
+                    // redistribution have to make changes to the parent.children
+                    // will always redistribute evenly 
+                    // hueristic/strategy: try redistribution first
+                    // search for redistribution existence: done in redistfind helper
+
+                    int j =0;
+                    // first find current in parent.children
+                    while(current != parent.children[j]){
+                        j++;
+                    }
+
+                    int redistributorIndex = redistFind(j, parent);
+                    if(redistributorIndex != -1) { // if redistribution exists
+                        // redistribute
+                        KVPair entry_to_move = parent.children[redistributorIndex].keyValues[this.t];
+                        // slot to fill in current
+                        current.keyValues[this.t-1] = entry_to_move;
+                        current.children[this.t] = parent.children[redistributorIndex].children[this.t+1];
+                        // delete entry in redistributor
+                        parent.children[redistributorIndex].keyValues[this.t] = null;
+                        parent.children[redistributorIndex].children[this.t+1] = null;
+                        oldchildentry = null;
+                        return oldchildentry;
+                    }
+                    else {
+                        // merge current and random sibling: strategy: choose j-1 for index of sibling in parent
+                        // unless j = 0 then choose j+1
+                        if (j!= 0) {
+                            oldchildentry = parent.keyValues[j-1];
+                        }
+                        else {
+                            oldchildentry = parent.keyValues[j];
+                        }
+                    }
+                }
             }
         }
         return null;
     }
 
+
+    int redistFind(int j, BPlusTreeNode parent) {
+        /*
+         * Finds if redistribution option exists, returns redistributors
+         * index if found. Otherwise -1.
+         */
+        if (j != parent.numChildren) {
+            if(parent.children[j+1].size > this.t) {
+                return j+1;
+            }
+        }
+        else if(j != 0) {
+            if(parent.children[j-1].size > this.t) {
+                return j-1;
+            }
+        }
+        return -1;
+    }
 
     boolean delete(long studentId) {
         /*
