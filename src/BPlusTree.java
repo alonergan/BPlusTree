@@ -238,22 +238,26 @@ class BPlusTree {
                     oldchildentry = null;
                     return oldchildentry;
                 }
-                // else: get a sibling of current (hueristic use parent pointer to find sibling)
+                // else: get a sibling of current (Algo states we can use parent pointer to find sibling)
                 else {
-                    boolean redistFound; // redistribution found variable
-                    //find s
-                    for(int j =0; j<parent.numChildren; j++) {
-                        // redistribution have to make changes to the parent.children
-                        // redistribute evenly amongst even number 2*t of max pairs
-                        // hueristic/strategy: try redistribution first
+                    // start proc to find s
+                    int j =0;
+                    // first find current in parent.children
+                    while(current != parent.children[j]){
+                        j++;
+                    }
+                    // redistribution have to make changes to the parent.children
+                    // will always redistribute evenly 
+                    // hueristic/strategy: try redistribution first
+                    // search for redist existence: done in redistfind helper
 
-                        // redistribution found
-                        if(parent.children[j].size > this.t) {
-                            
-                        }
-                        else {
-                            continue;
-                        }
+                    int redistributorIndex = redistFind(j, parent);
+                    if(redistributorIndex != -1) { // if redistribution exists
+                        // redistribute
+
+                    }
+                    else {
+                        // merge current and sibling
                     }
                 }
             }
@@ -261,6 +265,24 @@ class BPlusTree {
         return null;
     }
 
+
+    int redistFind(int j, BPlusTreeNode parent) {
+        /*
+         * Finds if redistribution option exists, returns redistributors
+         * index if found. Otherwise -1.
+         */
+        if (j != parent.numChildren) {
+            if(parent.children[j+1].size > this.t) {
+                return j+1;
+            }
+        }
+        else if(j != 0) {
+            if(parent.children[j-1].size > this.t) {
+                return j-1;
+            }
+        }
+        return -1;
+    }
 
     boolean delete(long studentId) {
         /*
