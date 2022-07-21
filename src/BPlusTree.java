@@ -259,7 +259,7 @@ class BPlusTree {
                         KVPair entry_to_move = parent.children[redistributorIndex].keyValues[this.t];
                         // slot to fill in current
                         current.keyValues[this.t-1] = entry_to_move;
-                        current.children[this.t] = parent.children[redistributorIndex];
+                        current.children[this.t] = parent.children[redistributorIndex].children[this.t+1];
                         // delete entry in redistributor
                         parent.children[redistributorIndex].keyValues[this.t] = null;
                         parent.children[redistributorIndex].children[this.t+1] = null;
@@ -267,7 +267,11 @@ class BPlusTree {
                         return oldchildentry;
                     }
                     else {
-                        // merge current and random sibling: j+1 or j-1 is index of sibling in parent
+                        // merge current and random sibling: strategy: choose j-1 for index of sibling in parent
+                        // unless j = 0
+                        if (j!= 0) {
+                            oldchildentry = parent.keyValues[j];
+                        }
                     }
                 }
             }
