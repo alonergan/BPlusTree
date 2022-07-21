@@ -2,6 +2,7 @@ import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * B+Tree Structure
@@ -65,7 +66,7 @@ class BPlusTree {
                 }
             }
         }
-        System.out.println("studentID: " + studentId + " was not found in the tree");
+//        System.out.println("studentID: " + studentId + " was not found in the tree");
         return -1;
     }
 
@@ -81,7 +82,7 @@ class BPlusTree {
 
             // Didn't split child return
             if (newChildEntry == null) {
-                return newChildEntry;
+                return null;
             }
             // We split child, must insert newChildEntry into parent
             else {
@@ -138,12 +139,17 @@ class BPlusTree {
         }
         // 2) If node is a leaf node
         else {
+            // If studentId already exists
+            // I know we don't have to really consider this case, but it gives peace of mind
+            for (int i = 0; i < node.size; i++) {
+                if (node.keyValues[i].key == entry.key)
+                    return null;
+            }
             // If node has space insert entry, set newChildEntry to null, return
-            if (node.size < max) {
+            if (node.size < this.max) {
                 node.keyValues[node.size] = entry;
                 node.size++;
-                newChildEntry = null;
-                return newChildEntry;
+                return null;
             }
             // Leaf is full, we must split
             else {
@@ -186,6 +192,8 @@ class BPlusTree {
         }
         // Else call recursive function
         insertHelper(root, entry, null);
+        // Update CSV
+//        Scanner scanner = new Scanner();
         return this;
     }
 

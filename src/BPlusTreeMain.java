@@ -91,6 +91,7 @@ public class BPlusTreeMain {
                             List<Long> listOfRecordID = new ArrayList<>();
                             listOfRecordID = bTree.print();
                             System.out.println("List of recordIDs in B+Tree " + listOfRecordID.toString());
+                            break;
                         }
                         default:
                             System.out.println("Wrong Operation");
