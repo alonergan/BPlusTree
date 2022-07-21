@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -14,8 +13,10 @@ public class BPlusTreeMain {
 
         /** Read the input file -- input.txt */
         Scanner scan = null;
+        File csvFile = null;
         try {
-            scan = new Scanner(new File("input_test.txt"));
+            csvFile = new File("Student_test.csv");
+            scan = new Scanner(new File("input.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
@@ -27,7 +28,7 @@ public class BPlusTreeMain {
         BPlusTree bTree = new BPlusTree(degree);
 
         /** Reading the database student.csv into B+Tree Node*/
-        List<Student> studentsDB = getStudents();
+        List<Student> studentsDB = getStudents(csvFile);
         int totalStudents = studentsDB.size();
 
         for (Student s : studentsDB) {
@@ -62,8 +63,11 @@ public class BPlusTreeMain {
                                 recordID = rand.nextInt(100);
                             }
                             Student s = new Student(studentId, age, studentName, major, level, recordID);
-                            bTree.insert(s);
-                            totalStudents++;
+                            studentsDB.add(s);  // Add to List
+                            bTree.insert(s);    // Add to tree
+                            totalStudents++;    // Increment
+                            // Add to CSV
+                            addToCSV(csvFile, s);
 
                             break;
                         }
@@ -74,8 +78,11 @@ public class BPlusTreeMain {
                                 System.out.println("Student deleted successfully.");
                             else
                                 System.out.println("Student deletion failed.");
+                            removeFromCSV(csvFile, studentId);
+                            // Remove student from studentDB
+                            studentsDB.removeIf(s -> (s.studentId == studentId));
 
-                            totalStudents--;
+                            totalStudents = studentsDB.size();
                             break;
                         }
                         case "search": {
@@ -104,17 +111,17 @@ public class BPlusTreeMain {
         }
     }
 
-    private static List<Student> getStudents() {
+    private static List<Student> getStudents(File fp) {
 
         List<Student> studentList = new ArrayList<>();
 
         try {
-            Scanner scnr = new Scanner(new File("Student_test.csv"));
+            Scanner scnr = new Scanner(fp);
 
             while (scnr.hasNextLine()) {
                 String line = scnr.nextLine();
                 String[] tokens = line.split(",");
-                // CSVFORMAT: StudentID, Name, Major, Level, age, recordNum
+                // CSV FORMAT: StudentID, Name, Major, Level, age, recordNum
                 Student student = new Student(Long.parseLong(tokens[0]), Integer.parseInt(tokens[4]), tokens[1], tokens[2], tokens[3], Long.parseLong(tokens[5]));
                 studentList.add(student);
             }
@@ -123,5 +130,59 @@ public class BPlusTreeMain {
             e.printStackTrace();
         }
         return studentList;
+    }
+
+    /**
+     * Use with BPlusTree.insert()
+     * Adds student to CSV and studentList
+     * DOESN'T ACCOUNT FOR DUPLICATES
+     */
+    private static void addToCSV(File fp, Student s) {
+        try {
+            FileWriter fw = new FileWriter(fp, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            pw.println(s.studentId + "," + s.studentName + "," + s.major + "," + s.level + "," + s.age + ","
+                    + s.recordId);
+            pw.flush();
+            pw.close();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Use with BPlusTree.delete()
+     * Removes student from CSV
+     * ACCOUNTS FOR DUPLICATES
+     */
+    private static void removeFromCSV(File fp, long studentId) {
+        try {
+            File new_file = new File("temp.csv");
+            if (new_file.exists()) new_file.delete();
+
+            FileWriter fw = new FileWriter(new_file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            Scanner scan = new Scanner(fp);
+            scan.useDelimiter("[,\n]");
+
+            while (scan.hasNextLine()) {
+                long currId = Long.parseLong(scan.next());
+                if (currId != studentId) {
+                    pw.println(currId + scan.nextLine());
+                }
+                else scan.nextLine();
+            }
+            scan.close();
+            pw.flush();
+            pw.close();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }
