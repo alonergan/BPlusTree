@@ -215,7 +215,7 @@ class BPlusTree {
             }
             // we merged, (discarded child node) need to update rest of tree
             else {
-                // remove oldchild entry from N (find it, then remove it, then update keys and children)
+                // remove oldchild entry from N (find it, then remove it, then update children)
                 boolean found = false;
 
                 // current.children array is updated here
@@ -225,17 +225,15 @@ class BPlusTree {
                         found = true;
                     }
                     // edge case: deleting last entry/child in array
-                    if (i == current.size-1) {
-                        current.keyValues[i] = null;
+                    if (i == current.numChildren-1) {
+                        current.children[i] = null;
                         break;
                     }
                     //update values in array
-                    if ((found == true) && (i != current.size-1)) {
-                        current.keyValues[i] = current.keyValues[i+1];
-                        current.children[i+1] = current.children[i+2];
+                    if ((found == true) && (i != current.numChildren-1)) {
+                        current.children[i] = current.children[i+1];
                     }
                 }
-                current.size--;
                 current.numChildren--;
                 // now check min occupancy
                 // if current (N in algo) has entries to spare
@@ -244,20 +242,17 @@ class BPlusTree {
                     return oldchildentry;
                 }
                 // else: get a sibling of current (Algo states we can use parent pointer to find sibling)
-
+                // choose left sibling if it exists
                 else {
-                    // redistribution have to make changes to the parent.children
-                    // will always redistribute evenly 
-                    // hueristic/strategy: try redistribution first
-                    // search for redistribution existence: done in redistfind helper
-
+                    // finding current
                     int j =0;
-                    // first find current in parent.children
                     while(current != parent.children[j]){
                         j++;
                     }
+                    // if current is the end node (must choose left sibling)
+                    if (j == parent.numChildren -1 ){
 
-                    int redistributorIndex = redistFind(j, parent);
+                    }
                 }
             }
         }
