@@ -92,8 +92,7 @@ class BPlusTree {
                     node.children[node.numChildren] = newChildEntry.child;
                     node.numChildren++;
                     node.size++;
-                    newChildEntry = null;
-                    return newChildEntry;
+                    return null;
                 }
                 // If no space in interior node, must split
                 else {
