@@ -297,7 +297,24 @@ class BPlusTree {
                             return oldchildentry;
                         }
                         else {
+                            KVPair tmp = oldchildentry;
                             oldchildentry = parent.keyValues[j];
+                            //pull splitting key into node on left
+                            parent.children[j-1].keyValues[this.t] = parent.keyValues[j-1];
+                            // find index of temporary oldchildentry
+                            int p = 0;
+                            while(tmp != parent.children[j].keyValues[p]){
+                                p++;
+                            }
+                            //update child array 
+                            parent.children[j-1].children[this.t+1] = parent.children[j].children[p];
+                            // move entries from m to node on the left
+                            for (i=0; i < parent.children[j+1].numChildren; i++) {
+                                parent.children[j].keyValues[this.t+1+i] = parent.children[j+1].keyValues[i];
+                                parent.children[j].children[this.t+2+i] = parent.children[j+1].children[i+1];
+                            }
+                            parent.children[j+1] = null;
+                            return oldchildentry;
                         }
                     }
                 }
