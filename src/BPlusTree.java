@@ -256,7 +256,15 @@ class BPlusTree {
                     int redistributorIndex = redistFind(j, parent);
                     if(redistributorIndex != -1) { // if redistribution exists
                         // redistribute
-
+                        KVPair entry_to_move = parent.children[redistributorIndex].keyValues[this.t];
+                        // slot to fill in current
+                        current.keyValues[this.t-1] = entry_to_move;
+                        current.children[this.t] = parent.children[redistributorIndex];
+                        // delete entry in redistributor
+                        parent.children[redistributorIndex].keyValues[this.t] = null;
+                        parent.children[redistributorIndex].children[this.t+1] = null;
+                        oldchildentry = null;
+                        return oldchildentry;
                     }
                     else {
                         // merge current and sibling
