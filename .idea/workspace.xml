@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5c2f328d-c619-4b76-9456-ccfc11b1dd3a" name="Changes" comment="Fixed Insert algorithm to represent correct B+ tree structure. (Structure of tree was incorrect and did not handle interior node splitting)">
+    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="Insert's like 75% done just need to make sure everything is connected the right way&#10;TODO: link sibling leaves, sort children[] when nodes are split/ reconsolidated">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Student_test.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BPlusTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BPlusTreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTreeNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlusTreeMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTreeMain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="AnnotationType" />
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -26,10 +17,7 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2CDnY9fwvMQGRpkqp3j3ySLG9vO" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="2CAdLtBgo0zQLOV4w3w4VnWlZiM" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -37,7 +25,8 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
 }</component>
   <component name="RunManager">
@@ -57,12 +46,34 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5c2f328d-c619-4b76-9456-ccfc11b1dd3a" name="Changes" comment="" />
-      <created>1658346069954</created>
+      <changelist id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="" />
+      <created>1658249270877</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1658346069954</updated>
+      <updated>1658249270877</updated>
     </task>
+    <task id="LOCAL-00001" summary="started work on a recursive insert method&#10;created a class for key-value pair">
+      <created>1658262952192</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1658262952192</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Issue with KeyValue name- changed to KVPair">
+      <created>1658264046148</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1658264046148</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Insert's like 75% done just need to make sure everything is connected the right way&#10;TODO: link sibling leaves, sort children[] when nodes are split/ reconsolidated">
+      <created>1658272816152</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1658272816152</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -77,34 +88,20 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed Insert algorithm to represent correct B+ tree structure. (Structure of tree was incorrect and did not handle interior node splitting)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Insert algorithm to represent correct B+ tree structure. (Structure of tree was incorrect and did not handle interior node splitting)" />
+    <MESSAGE value="started work on a recursive insert method&#10;created a class for key-value pair" />
+    <MESSAGE value="Issue with KeyValue name- changed to KVPair" />
+    <MESSAGE value="Insert's like 75% done just need to make sure everything is connected the right way&#10;TODO: link sibling leaves, sort children[] when nodes are split/ reconsolidated" />
+    <option name="LAST_COMMIT_MESSAGE" value="Insert's like 75% done just need to make sure everything is connected the right way&#10;TODO: link sibling leaves, sort children[] when nodes are split/ reconsolidated" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
-          <line>201</line>
-          <properties class="BPlusTree" method="print">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="19" />
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/BPlusTreeMain.java</url>
+          <line>90</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="((BPlusTree)this).root.children[0].next.keyValues[1]" custom="BPlusTree" />
-        <watch expression="((BPlusTree)this).root.children[1].children" custom="BPlusTree" />
-        <watch expression="((BPlusTree)this).root.children" custom="BPlusTree" />
-        <watch expression="((BPlusTree)this).root.keyValues" custom="BPlusTree" />
-        <watch expression="((BPlusTree)this).root.children[1].children[1]" custom="BPlusTree" />
-        <watch expression="((BPlusTree)this).root.keyValues" custom="BPlusTree" />
-        <watch expression="((BPlusTree)this).root.children[1].children[1]" custom="BPlusTree" />
-        <watch expression="((BPlusTree)this).root.children[6].children" custom="BPlusTree" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>
