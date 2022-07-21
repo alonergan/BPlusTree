@@ -189,27 +189,49 @@ class BPlusTree {
         return this;
     }
 
-    boolean delete2 (BPlusTreeNode parent, BPlusTreeNode current, long studentId, KVPair oldchildentry) {
+    BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {
             // choose subtree
-            int i = 0;
+            int i;
             // logic: i will be the location of the child to use
             for (i = 0; i < current.size; i++) {
                 if (studentId < current.keyValues[i].key) {
                     break;
                 }
             }
-            delete2(current, current.children[i], studentId, null); // recursive delete
-            if (oldchildentry == null) {
-                return false;
+            oldchildentry = deleteHelper(current, current.children[i], studentId, oldchildentry); // recursive delete
+
+            if (oldchildentry == null) { // means we did not merge on the last recursive call
+                return oldchildentry;
             }
+            // we merged, (discarded child node) need to update rest of tree
             else {
+                // remove oldchild entry from N (find it, then remove it) (done in for loop)
+                boolean found = false;
+                for (i = 0; i< current.numChildren; i++) {
+                    // NOTE: I am assuming that the children array is properly ordered/filled in
+                    // with null vals only at the end of the array and not in the middle
+                    if (current.children[i] == oldchildentry) {
+                        found = true;
+                    }
+                    // edge case: deleting last child in array
+                    if (i == current.numChildren-1) {
+                        current.children[i] = null;
+                        break;
+                    }
+                    //update values in array
+                    if ((found == true) && (i != current.numChildren-1)) {
+                        current.children[i] = current.children[i+1];
+                    }
+                }
+                current.numChildren--;
+                // now check min occupancy
                 
             }
         }
-        return false;
+        return null;
     }
 
 
@@ -226,7 +248,7 @@ class BPlusTree {
             return false;
         }
         else {
-            delete2(null, this.root, studentId, null);
+            deleteHelper(null, this.root, studentId, null);
         }
         return true;
     }
