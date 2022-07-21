@@ -189,7 +189,7 @@ class BPlusTree {
         return this;
     }
 
-    BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
+    KVPair deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, KVPair oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {
@@ -208,27 +208,36 @@ class BPlusTree {
             }
             // we merged, (discarded child node) need to update rest of tree
             else {
-                // remove oldchild entry from N (find it, then remove it) (done in for loop)
+                // remove oldchild entry from N (find it, then remove it, then update keys and children)
                 boolean found = false;
-                for (i = 0; i< current.numChildren; i++) {
-                    // NOTE: I am assuming that the children array is properly ordered/filled in
-                    // with null vals only at the end of the array and not in the middle
-                    if (current.children[i] == oldchildentry) {
+
+                // NOTE: I am assuming that the keyval array is properly ordered/filled in
+                // with null vals only at the end of the array and not in the middle
+
+                // NOTE: I am also assuming that the children array was already updated
+                // in the previous recursion (when node M was discarded)
+
+                for (i = 0; i< current.size; i++) {
+                    if (current.keyValues[i].key == oldchildentry.key) {
                         found = true;
                     }
-                    // edge case: deleting last child in array
-                    if (i == current.numChildren-1) {
-                        current.children[i] = null;
+                    // edge case: deleting last entry/child in array
+                    if (i == current.size-1) {
+                        current.keyValues[i] = null;
                         break;
                     }
                     //update values in array
-                    if ((found == true) && (i != current.numChildren-1)) {
-                        current.children[i] = current.children[i+1];
+                    if ((found == true) && (i != current.size-1)) {
+                        current.keyValues[i] = current.keyValues[i+1];
                     }
                 }
-                current.numChildren--;
+                current.size--;
                 // now check min occupancy
-                
+                // if current (N in algo) has entries to spare
+                if (current.size >= this.t) {
+                    oldchildentry = null;
+                    return oldchildentry;
+                }
             }
         }
         return null;
