@@ -268,8 +268,11 @@ class BPlusTree {
                     }
                     else {
                         // merge current and random sibling: strategy: choose j-1 for index of sibling in parent
-                        // unless j = 0
+                        // unless j = 0 then choose j+1
                         if (j!= 0) {
+                            oldchildentry = parent.keyValues[j-1];
+                        }
+                        else {
                             oldchildentry = parent.keyValues[j];
                         }
                     }
