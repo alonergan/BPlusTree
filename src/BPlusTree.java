@@ -74,7 +74,7 @@ class BPlusTree {
         if (!node.leaf) {
             // Choose subtree and recursively call method
             int i = 0;
-            while (i < node.size && entry.key > node.keyValues[i].key) {
+            while (i < node.size && entry.key >= node.keyValues[i].key) {
                 i++;
             }
             newChildEntry = insertHelper(node.children[i], entry, newChildEntry);
@@ -237,6 +237,10 @@ class BPlusTree {
                 if (current.size >= this.t) {
                     oldchildentry = null;
                     return oldchildentry;
+                }
+                // else: get a sibling of current (hueristic take )
+                else {
+
                 }
             }
         }
