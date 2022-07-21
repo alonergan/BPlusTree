@@ -215,7 +215,7 @@ class BPlusTree {
                 // with null vals only at the end of the array and not in the middle
 
                 // current.children array is updated here too (always the right side M deleted
-                // in the recursion)
+                // in the recursion so i + 1)
 
                 for (i = 0; i< current.size; i++) {
                     if (current.keyValues[i].key == oldchildentry.key) {
@@ -224,7 +224,6 @@ class BPlusTree {
                     // edge case: deleting last entry/child in array
                     if (i == current.size-1) {
                         current.keyValues[i] = null;
-                        current.children[i+1] = null;
                         break;
                     }
                     //update values in array
@@ -234,6 +233,7 @@ class BPlusTree {
                     }
                 }
                 current.size--;
+                current.numChildren--;
                 // now check min occupancy
                 // if current (N in algo) has entries to spare
                 if (current.size > this.t) {
