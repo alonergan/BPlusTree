@@ -238,12 +238,22 @@ class BPlusTree {
                     oldchildentry = null;
                     return oldchildentry;
                 }
-                // else: get a sibling of current (hueristic use current.next)
+                // else: get a sibling of current (hueristic use parent pointer to find sibling)
                 else {
-                    // redistribution have to make changes to the parent.children
-                    // redistribute evenly amongst even number 2*t of max pairs
-                    if(current.next.size > this.t) {
-                        
+                    boolean redistFound; // redistribution found variable
+                    //find s
+                    for(int j =0; j<parent.numChildren; j++) {
+                        // redistribution have to make changes to the parent.children
+                        // redistribute evenly amongst even number 2*t of max pairs
+                        // hueristic/strategy: try redistribution first
+
+                        // redistribution found
+                        if(parent.children[j].size > this.t) {
+                            
+                        }
+                        else {
+                            continue;
+                        }
                     }
                 }
             }
