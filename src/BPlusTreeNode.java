@@ -40,6 +40,12 @@ class BPlusTreeNode {
      * number of key-value pairs in the B-tree
      */
     int size;
+
+    /**
+     * Tracks current number of children
+     */
+    int numChildren;
+
     /**
      * true when node is leaf. Otherwise false
      */
@@ -60,6 +66,7 @@ class BPlusTreeNode {
         this.keyValues = new KVPair[2*t];
         // Instantiate children
         this.children = new BPlusTreeNode[2*t + 1];
+        this.numChildren = 0;
     }
 
     void clearKeys() {
@@ -67,5 +74,12 @@ class BPlusTreeNode {
             this.keyValues[i] = null;
         }
         this.size = 0;
+    }
+
+    void clearChildren() {
+        for (int i = 0; i < numChildren; i++) {
+            this.children[i] = null;
+        }
+        this.numChildren = 0;
     }
 }
