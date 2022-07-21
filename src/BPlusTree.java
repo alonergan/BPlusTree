@@ -267,7 +267,7 @@ class BPlusTree {
                         return oldchildentry;
                     }
                     else {
-                        // merge current and sibling
+                        // merge current and random sibling: j+1 or j-1 is index of sibling in parent
                     }
                 }
             }
