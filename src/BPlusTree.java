@@ -234,7 +234,7 @@ class BPlusTree {
                 current.size--;
                 // now check min occupancy
                 // if current (N in algo) has entries to spare
-                if (current.size >= this.t) {
+                if (current.size > this.t) {
                     oldchildentry = null;
                     return oldchildentry;
                 }
@@ -243,7 +243,7 @@ class BPlusTree {
                     // redistribution have to make changes to the parent.children
                     // redistribute evenly amongst even number 2*t of max pairs
                     if(current.next.size > this.t) {
-
+                        
                     }
                 }
             }
