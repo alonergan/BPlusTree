@@ -16,7 +16,7 @@ public class BPlusTreeMain {
         File csvFile = null;
         try {
             csvFile = new File("Student_test.csv");
-            scan = new Scanner(new File("input.txt"));
+            scan = new Scanner(new File("input_test.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
@@ -76,12 +76,13 @@ public class BPlusTreeMain {
                             boolean result = bTree.delete(studentId);
                             if (result)
                                 System.out.println("Student deleted successfully.");
-                            else
+                            else {
                                 System.out.println("Student deletion failed.");
+                                break;
+                            }
+                            // Remove student from CSV and List
                             removeFromCSV(csvFile, studentId);
-                            // Remove student from studentDB
                             studentsDB.removeIf(s -> (s.studentId == studentId));
-
                             totalStudents = studentsDB.size();
                             break;
                         }
@@ -125,7 +126,7 @@ public class BPlusTreeMain {
                 Student student = new Student(Long.parseLong(tokens[0]), Integer.parseInt(tokens[4]), tokens[1], tokens[2], tokens[3], Long.parseLong(tokens[5]));
                 studentList.add(student);
             }
-
+            scnr.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,14 +140,15 @@ public class BPlusTreeMain {
      */
     private static void addToCSV(File fp, Student s) {
         try {
-            FileWriter fw = new FileWriter(fp, true);
+            FileWriter fw = new FileWriter(fp, false);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
-
+            Scanner scan = new Scanner(fp);
             pw.println(s.studentId + "," + s.studentName + "," + s.major + "," + s.level + "," + s.age + ","
                     + s.recordId);
             pw.flush();
             pw.close();
+            scan.close();
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -160,10 +162,11 @@ public class BPlusTreeMain {
      */
     private static void removeFromCSV(File fp, long studentId) {
         try {
-            File new_file = new File("temp.csv");
-            if (new_file.exists()) new_file.delete();
+            File new_file = new File("TEMPCSV.csv");
+            if (new_file.exists())
+                new_file.delete();
 
-            FileWriter fw = new FileWriter(new_file, true);
+            FileWriter fw = new FileWriter(new_file, false);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
@@ -180,6 +183,10 @@ public class BPlusTreeMain {
             scan.close();
             pw.flush();
             pw.close();
+
+            //String csvName = fp.getPath();
+            fp.delete();
+            new_file.renameTo(fp);
         }
         catch(IOException e) {
             e.printStackTrace();

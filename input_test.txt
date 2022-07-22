@@ -1,2 +1,4 @@
 3
-print
+delete 321114982
+delete 320874982
+delete 51135593
