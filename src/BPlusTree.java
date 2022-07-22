@@ -211,7 +211,7 @@ class BPlusTree {
             oldchildentry = deleteHelper(current, current.children[i], studentId, oldchildentry); // recursive delete
 
             if (oldchildentry == null) { // means we did not merge on the last recursive call
-                return oldchildentry;
+                return null;
             }
             // we merged, (discarded child node) need to update rest of tree
             else {
@@ -219,7 +219,6 @@ class BPlusTree {
                 boolean found = false;
 
                 // current.children array is updated here
-
                 for (i = 0; i< current.numChildren; i++) {
                     if (current.children[i] == oldchildentry) {
                         found = true;
@@ -230,32 +229,65 @@ class BPlusTree {
                         break;
                     }
                     //update values in array
-                    if ((found == true) && (i != current.numChildren-1)) {
+                    if ((found == true) && (i != current.numChildren - 1)) {
                         current.children[i] = current.children[i+1];
                     }
                 }
+                // current.children[i] = null;
                 current.numChildren--;
-                // now check min occupancy
-                // if current (N in algo) has entries to spare
-                if (current.size > this.t) {
-                    oldchildentry = null;
-                    return oldchildentry;
+                current.size--;
+                // now check occupancy
+                // if current (N in algo) is above 50% capacity
+                if (current.size >= this.t) {
+                    return null;
                 }
                 // else: get a sibling of current (Algo states we can use parent pointer to find sibling)
-                // choose left sibling if it exists
                 else {
-                    // finding current
+                    // finding index of current
                     int j =0;
-                    while(current != parent.children[j]){
+                    while (current != parent.children[j]) {
                         j++;
                     }
                     // if current is the end node (must choose left sibling)
-                    if (j == parent.numChildren -1 ){
+                    if (j == parent.numChildren -1) {
+
+                    }
+                    // Otherwise choose the sibling to the right (current is the leftmost node)
+                    else {
 
                     }
                 }
             }
         }
+        // Current node is a leaf; delete KV pair and return.
+        else {
+            // Remove node
+            int i;
+            for (i = 0; i < current.numChildren; i++) {
+                if (current.keyValues[i].key == studentId)
+                    break;
+            }
+            current.keyValues[i] = null;
+            current.size--;
+            if (current.size >= this.t)
+                return null;
+            else {
+//                 // Get a sibling of current leaf
+                // pseudo-pseudo code; just thinking rn i'm tired
+//                 if (sibling.size + current.size >= 2 * t) {
+//                     for (int i = 0; sibling.size > t; i++) {
+//                          current.keyValues[size - 1] = sibling.keyValues[i];
+//                          sibling.keyValues[i] = null;
+//                          current.size++;
+//                    }
+//              // replace key value in parent entry by new low-key value in M
+//                }
+                // Otherwise, merge current and sibling
+
+
+            }
+        }
+        // shouldn't ever reach this?
         return null;
     }
 
