@@ -235,10 +235,9 @@ class BPlusTree {
                 }
                 // current.children[i] = null;
                 current.numChildren--;
-                current.size--;
                 // now check occupancy
-                // if current (N in algo) is above 50% capacity
-                if (current.size >= this.t) {
+                // if current (N in algo) is above 50% capacity or if current == root (it can be below 50%)
+                if ((current.size >= this.t) || (current == this.root)) {
                     return null;
                 }
                 // else: get a sibling of current (Algo states we can use parent pointer to find sibling)
@@ -248,11 +247,39 @@ class BPlusTree {
                     while (current != parent.children[j]) {
                         j++;
                     }
-                    // if current is the end node (must choose left sibling)
+                    // if current is the end node (must choose left sibling) j-1
                     if (j == parent.numChildren -1) {
+                        // if sibling has entries to spare: redistribute evenly
+                        if (parent.children[j-1].size > this.t) {
+                            int totalkeys = parent.children[j-1].size + parent.children[j].size;
+                            int entriestotake = parent.children[j-1].size - (int)Math.floor(totalkeys/2);
+                            int sibsize = parent.children[j-1].size;
+                            // redistribute thru parent
+                            for (i =0; i<entriestotake; i++) {
+                                // make space in current
+                                for (int c =0; c< current.size; c++) {
+                                    current.keyValues[c+1] = current.keyValues[c];
+                                }
+                                for (int b =0; b< current.numChildren; b++) {
+                                    current.children[b+1] = current.children[b];
+                                }
+                                // add parent to current.keyvals[0], update current.size
+                                current.keyValues[0] = parent.keyValues[j-1];
+                                current.size++;
+                                // add sibling child to current.children[0]
+                                current.children[0] = parent.children[j-1].children[sibsize - i];
+                                parent.children[j-1].numChildren--;
+                                current.numChildren++;
+                                // put sibling keyval into parent, update sibling.size
+                                parent.keyValues[j-1]= parent.children[j-1].keyValues[sibsize - i-1];
+                                parent.children[j-1].size--;
+                            }
+                            oldchildentry = null;
+                            return oldchildentry;
+                        }
 
                     }
-                    // Otherwise choose the sibling to the right (current is the leftmost node)
+                    // Otherwise choose the sibling to the right j+1 (current is the leftmost node)
                     else {
 
                     }
