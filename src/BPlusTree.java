@@ -278,7 +278,20 @@ class BPlusTree {
                             return oldchildentry;
                         }
                         else { // merge
+                            oldchildentry = parent.children[j];
+                            int entriestomove = this.t -1;
+                            // pull parent keyval into sibling (node on left)
+                            parent.children[j-1].keyValues[this.t] = parent.keyValues[j-1];
+                            parent.size--;
+                            parent.children[j-1].size++;
+                            // bring in leftmost pointer in M
+                            parent.children[j-1].children[this.t+1] = current.children[0];
+                            parent.children[j-1].numChildren++;
+                            // bring in rest of M
 
+                            // discard M
+                            parent.children[j] = null;
+                            parent.numChildren--;
                         }
 
                     }
@@ -300,7 +313,7 @@ class BPlusTree {
                                 parent.children[j+1].numChildren--;
                                 // put sibling keyval into parent, update size
                                 parent.keyValues[j] = parent.children[j+1].keyValues[0];
-                                parent.children[j+1].size++;
+                                parent.children[j+1].size--;
                                 // update sibling
                                 for (int c = 0; c< sibsize-i; c++) {
                                     parent.children[j+1].keyValues[c] = parent.children[j+1].keyValues[c+1];
