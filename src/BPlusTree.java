@@ -234,7 +234,6 @@ class BPlusTree {
                         current.children[i] = current.children[i+1];
                     }
                 }
-                // current.children[i] = null;
                 current.numChildren--;
                 // now check occupancy
                 // if current (N in algo) is above 50% capacity or if current == root (it can be below 50%)
@@ -378,30 +377,43 @@ class BPlusTree {
         }
         // Current node is a leaf; delete KV pair and return.
         else {
-            // Remove node
-            int i;
-            for (i = 0; i < current.size; i++) {
-                if (current.keyValues[i].key == studentId)
-                    break;
+            // if Current has entries to spare
+            if (current.size > this.t) {
+                int i;
+                // remove entry
+                boolean found = false;
+                for (i = 0; i< current.size; i++) {
+                    if (current.keyValues[i].key == studentId) {
+                        found = true;
+                    }
+                    // edge case: deleting last entry/child in array
+                    if (i == current.size-1) {
+                        current.keyValues[i] = null;
+                        break;
+                    }
+                    //update values in array
+                    if ((found == true) && (i != current.size-1)) {
+                        current.keyValues[i] = current.keyValues[i+1];
+                    }
+                }
+                oldchildentry = null;
+                current.size--;
+                return oldchildentry;
             }
-            current.keyValues[i] = null;
-            current.size--;
-            if (current.size >= this.t)
-                return null;
             else {
-//                 // Get a sibling of current leaf
-                // pseudo-pseudo code; just thinking rn i'm tired
-//                 if (sibling.size + current.size >= 2 * t) {
-//                     for (int i = 0; sibling.size > t; i++) {
-//                          current.keyValues[size - 1] = sibling.keyValues[i];
-//                          sibling.keyValues[i] = null;
-//                          current.size++;
-//                    }
-//              // replace key value in parent entry by new low-key value in M
-//                }
-                // Otherwise, merge current and sibling
+                // get a sibling (first find index in parent)
+                int j =0;
+                while (current != parent.children[j]) {
+                    j++;
+                }
+                // if current is the end node (must choose left sibling) j-1
+                if (j == parent.numChildren -1) {
+                    
+                }
+                // choose right sibling j+1
+                else {
 
-
+                }
             }
         }
         // shouldn't ever reach this?
