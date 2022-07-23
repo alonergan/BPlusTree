@@ -408,11 +408,24 @@ class BPlusTree {
                 }
                 // if current is the end node (must choose left sibling) j-1
                 if (j == parent.numChildren -1) {
-                    
+                    // redistribute
+                    if (parent.children[j-1].size > this.t) {
+
+                    }
+                    else { // merge
+
+                    }
                 }
                 // choose right sibling j+1
                 else {
+                    // redistribute
+                    if (parent.children[j+1].size > this.t) {
 
+                    }
+                    // merge
+                    else {
+                        
+                    }
                 }
             }
         }
