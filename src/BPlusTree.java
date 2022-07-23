@@ -292,6 +292,11 @@ class BPlusTree {
                             // discard M
                             parent.children[j] = null;
                             parent.numChildren--;
+
+                            // update root if needed
+                            if (parent == this.root && parent.numChildren==0) {
+                                this.root = parent.children[j-1];
+                            }
                         }
 
                     }
