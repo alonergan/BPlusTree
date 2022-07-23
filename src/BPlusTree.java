@@ -1,6 +1,7 @@
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 import java.util.Scanner;
 
@@ -287,16 +288,26 @@ class BPlusTree {
                             // bring in leftmost pointer in M
                             parent.children[j-1].children[this.t+1] = current.children[0];
                             parent.children[j-1].numChildren++;
+                            current.numChildren--;
                             // bring in rest of M
-
+                            for(int a=0; a<entriestomove; a++) {
+                                // first bring in key
+                                parent.children[j-1].keyValues[this.t + a+ 1] = current.keyValues[a];
+                                parent.children[j-1].size++;
+                                current.size--;
+                                // then children pters
+                                parent.children[j-1].children[this.t+2+a] = current.children[a+1];
+                                parent.children[j-1].numChildren++;
+                                current.numChildren--;
+                            }
                             // discard M
                             parent.children[j] = null;
                             parent.numChildren--;
-
                             // update root if needed
                             if (parent == this.root && parent.numChildren==0) {
                                 this.root = parent.children[j-1];
                             }
+                            return oldchildentry;
                         }
 
                     }
@@ -331,7 +342,35 @@ class BPlusTree {
                             return oldchildentry;
                         }
                         else { // merge
-
+                            oldchildentry = parent.children[j+1];
+                            int entriestomove = parent.children[j+1].size;
+                            // pull parent keyval into current (node on left)
+                            current.keyValues[this.t-1] = parent.keyValues[j];
+                            parent.size--;
+                            current.size++;
+                            // bring in leftmost pointer in M
+                            current.children[this.t] = parent.children[j+1].children[0];
+                            current.numChildren++;
+                            parent.children[j+1].numChildren--;
+                            // bring in rest of M
+                            for(int a=0; a<entriestomove; a++) {
+                                // first bring in key
+                                current.keyValues[this.t + a] = parent.children[j+1].keyValues[a];
+                                current.size++;
+                                parent.children[j+1].size--;
+                                // then children pters
+                                current.children[this.t+1+a] = parent.children[j+1].children[a+1];
+                                current.numChildren++;
+                                parent.children[j+1].numChildren--;
+                            }
+                            // discard M
+                            parent.children[j+1] = null;
+                            parent.numChildren--;
+                            // update root if needed
+                            if (parent == this.root && parent.numChildren==0) {
+                                this.root = current;
+                            }
+                            return oldchildentry;
                         }
                     }
                 }
