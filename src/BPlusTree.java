@@ -277,11 +277,44 @@ class BPlusTree {
                             oldchildentry = null;
                             return oldchildentry;
                         }
+                        else { // merge
+
+                        }
 
                     }
                     // Otherwise choose the sibling to the right j+1 (current is the leftmost node)
                     else {
+                        // if sibling has entries to spare: redistribute evenly
+                        if (parent.children[j+1].size > this.t) {
+                            int totalkeys = parent.children[j+1].size + parent.children[j].size;
+                            int entriestotake = parent.children[j+1].size - (int)Math.floor(totalkeys/2);
+                            int sibsize = parent.children[j+1].size;
+                            // redistribute thru parent
+                            for (i= 0; i< entriestotake; i++) {
+                                // bring down parent
+                                current.keyValues[current.size] = parent.keyValues[j];
+                                current.size++;
+                                // bring in sibling child
+                                current.children[current.numChildren] = parent.children[j+1].children[0];
+                                current.numChildren++;
+                                parent.children[j+1].numChildren--;
+                                // put sibling keyval into parent, update size
+                                parent.keyValues[j] = parent.children[j+1].keyValues[0];
+                                parent.children[j+1].size++;
+                                // update sibling
+                                for (int c = 0; c< sibsize-i; c++) {
+                                    parent.children[j+1].keyValues[c] = parent.children[j+1].keyValues[c+1];
+                                }
+                                for (int b = 0; b< parent.children[j+1].numChildren +1; b++) {
+                                    parent.children[j+1].children[b] = parent.children[j+1].children[b+1];
+                                }
+                            }
+                            oldchildentry = null;
+                            return oldchildentry;
+                        }
+                        else { // merge
 
+                        }
                     }
                 }
             }
@@ -290,7 +323,7 @@ class BPlusTree {
         else {
             // Remove node
             int i;
-            for (i = 0; i < current.numChildren; i++) {
+            for (i = 0; i < current.size; i++) {
                 if (current.keyValues[i].key == studentId)
                     break;
             }
