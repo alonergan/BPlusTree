@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="added a sorting method. might need to add more calls to it; search is acting wonky" />
+    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/main" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -113,7 +116,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658646033291</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;">
+      <created>1658646444573</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1658646444573</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -139,7 +149,8 @@
     <MESSAGE value="Finished modifying CSV and studentsDB" />
     <MESSAGE value="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length" />
     <MESSAGE value="added a sorting method. might need to add more calls to it; search is acting wonky" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a sorting method. might need to add more calls to it; search is acting wonky" />
+    <MESSAGE value="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
