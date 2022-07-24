@@ -553,10 +553,8 @@ class BPlusTree {
         // Traverse leaf nodes
         do {
             // Get all recordID for current leaf node and move to sibling
-            for (int i = 0; i < this.max; i++) {
-                if (current.keyValues[i] !=null) {
+            for (int i = 0; i < current.size; i++) {
                 listOfRecordID.add(current.keyValues[i].value);
-                }
             }
             current = current.next;
         } while (current != null);
