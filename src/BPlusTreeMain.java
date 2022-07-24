@@ -15,8 +15,8 @@ public class BPlusTreeMain {
         Scanner scan = null;
         File csvFile = null;
         try {
-            csvFile = new File("../Student.csv");
-            scan = new Scanner(new File("../input_test.txt"));
+            csvFile = new File("Student.csv");
+            scan = new Scanner(new File("input_test.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
