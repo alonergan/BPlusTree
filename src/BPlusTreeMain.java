@@ -15,7 +15,7 @@ public class BPlusTreeMain {
         Scanner scan = null;
         File csvFile = null;
         try {
-            csvFile = new File("test1.csv");
+            csvFile = new File("Student_test.csv");
             scan = new Scanner(new File("input_test.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
@@ -110,7 +110,6 @@ public class BPlusTreeMain {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.print("done\n");
     }
 
     private static List<Student> getStudents(File fp) {
@@ -137,17 +136,19 @@ public class BPlusTreeMain {
     /**
      * Use with BPlusTree.insert()
      * Adds student to CSV and studentList
-     * DOESN'T ACCOUNT FOR DUPLICATES (duplicates will not be tested)
+     * DOESN'T ACCOUNT FOR DUPLICATES
      */
     private static void addToCSV(File fp, Student s) {
         try {
-            FileWriter fw = new FileWriter(fp, true);
+            FileWriter fw = new FileWriter(fp, false);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
+            Scanner scan = new Scanner(fp);
             pw.println(s.studentId + "," + s.studentName + "," + s.major + "," + s.level + "," + s.age + ","
                     + s.recordId);
             pw.flush();
             pw.close();
+            scan.close();
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -157,7 +158,7 @@ public class BPlusTreeMain {
     /**
      * Use with BPlusTree.delete()
      * Removes student from CSV
-     * ACCOUNTS FOR DUPLICATES (duplicates will not be tested)
+     * ACCOUNTS FOR DUPLICATES
      */
     private static void removeFromCSV(File fp, long studentId) {
         try {
@@ -165,7 +166,7 @@ public class BPlusTreeMain {
             if (new_file.exists())
                 new_file.delete();
 
-            FileWriter fw = new FileWriter(new_file, true);
+            FileWriter fw = new FileWriter(new_file, false);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
