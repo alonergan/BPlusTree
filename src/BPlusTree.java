@@ -221,8 +221,10 @@ class BPlusTree {
 
                 // current.children array is updated here
                 for (i = 0; i< current.numChildren; i++) {
-                    if (current.children[i] == oldchildentry) {
-                        found = true;
+                    if (current.children[i] != null) {
+                        if (current.children[i] == oldchildentry) {
+                            found = true;
+                        }
                     }
                     // edge case: deleting last entry/child in array
                     if (i == current.numChildren-1) {
@@ -391,8 +393,10 @@ class BPlusTree {
             // remove entry
             boolean found = false;
             for (i = 0; i< current.size; i++) {
-                if (current.keyValues[i].key == studentId) {
-                    found = true;
+                if (current.keyValues[i] != null) {
+                    if (current.keyValues[i].key == studentId) {
+                        found = true;
+                    }
                 }
                 // edge case: deleting last entry/child in array
                 if (i == current.size-1) {
