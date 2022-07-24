@@ -93,6 +93,7 @@ class BPlusTree {
                     node.children[node.numChildren] = newChildEntry.child;
                     node.numChildren++;
                     node.size++;
+                    node.sortNode();
                     return null;
                 }
                 // If no space in interior node, must split
@@ -116,12 +117,14 @@ class BPlusTree {
                     node2.size = tmp.keyValues.length - t;
                     node2.numChildren = tmp.children.length - (t+1);
 
+
                     // Add newChildEntry to parent
                     node2.keyValues[node2.size] = newChildEntry.keyValue; // Add new key
                     node2.children[node2.numChildren] = newChildEntry.child; // Add child reference
                     node2.size++;
                     node2.numChildren++;
-
+                    // Sort new node
+                    node2.sortNode();
                     newChildEntry = new newChildEntry(node2.keyValues[0], node2);
                     // If root node was just split, revise tree
                     if (node == root) {
@@ -157,6 +160,11 @@ class BPlusTree {
                 BPlusTreeNode leaf2 = new BPlusTreeNode(t, true);   // Right node of split leaf
                 System.arraycopy(node.keyValues, 0, tmp, 0, node.keyValues.length); // Copy vals into tmp
                 tmp[max] = entry; // Add new entry before split
+                /* Shouldn't have any issues with NullPointerException from CompareTo override method*/
+                Arrays.sort(tmp, (a, b) -> {
+                    if (a.key < b.key) return -1;
+                    else return 1;
+                });
                 node.clearKeys(); // Clear current node
                 System.arraycopy(tmp, 0, node.keyValues, 0, t); // First t entries stay
                 System.arraycopy(tmp, t, leaf2.keyValues, 0, tmp.length - t); // Rest go into split node

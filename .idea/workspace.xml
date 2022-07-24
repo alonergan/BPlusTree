@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;" />
+    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="fixed methods writing to CSV(?)">
+      <change afterPath="$PROJECT_DIR$/Student_test.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlusTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlusTreeMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTreeMain.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -123,7 +128,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658646444573</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fixed methods writing to CSV(?)">
+      <created>1658646938691</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1658646938691</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -150,9 +162,19 @@
     <MESSAGE value="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length" />
     <MESSAGE value="added a sorting method. might need to add more calls to it; search is acting wonky" />
     <MESSAGE value="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;" />
+    <MESSAGE value="fixed methods writing to CSV(?)" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed methods writing to CSV(?)" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/BPlusTreeMain.java</url>
+          <line>113</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="bTree.root.children[0].keyValues[0]" />

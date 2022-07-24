@@ -110,6 +110,8 @@ public class BPlusTreeMain {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //BREAKPOINT HERE
+        System.out.println("done");
     }
 
     private static List<Student> getStudents(File fp) {
