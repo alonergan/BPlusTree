@@ -28,7 +28,7 @@ class BPlusTree {
         this.max = 2 * t; // should this be 2 * t?
     }
 
-    long search(long studentId) {
+    public long search(long studentId) {
         /*
          * TODO:
          * Implement this function to search in the B+Tree.
@@ -71,15 +71,15 @@ class BPlusTree {
         return -1;
     }
 
-    newChildEntry insertHelper(BPlusTreeNode node, KVPair entry, newChildEntry newChildEntry) {
+    private newChildEntry insertHelper(BPlusTreeNode node, KVPair entry, newChildEntry newChildEntry) {
         // 1) If node is a non-leaf node (N)
         if (!node.leaf) {
             // Choose subtree and recursively call method
-            int i = 0;
+            int i = 1;
             while (i < node.size && entry.key >= node.keyValues[i].key) {
                 i++;
             }
-            newChildEntry = insertHelper(node.children[i], entry, newChildEntry);
+            newChildEntry = insertHelper(node.children[i - 1], entry, newChildEntry);
 
             // Didn't split child return
             if (newChildEntry == null) {
@@ -188,14 +188,14 @@ class BPlusTree {
         }
     }
 
-    BPlusTree insert(Student student) {
+    public BPlusTree insert(Student student) {
         KVPair entry = new KVPair(student.studentId, student.recordId);
         // If root is null, create first node in tree
-        if (root == null) {
+        if (this.root == null) {
             BPlusTreeNode node = new BPlusTreeNode(t, true);
             node.keyValues[0] = entry;
             node.size++;
-            root = node;
+            this.root = node;
             return this;
         }
         // Else call recursive function
@@ -205,7 +205,7 @@ class BPlusTree {
         return this;
     }
 
-    BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
+    private BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {

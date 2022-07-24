@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="fixed methods writing to CSV(?)">
-      <change afterPath="$PROJECT_DIR$/Student_test.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test1.csv" afterDir="false" />
+    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="Ok back up to speed. I think the RecordID is just randomized">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Student_test.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_test.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BPlusTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BPlusTreeMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTreeMain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +135,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658646938691</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Ok back up to speed. I think the RecordID is just randomized">
+      <created>1658647767119</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1658647767119</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -163,21 +170,33 @@
     <MESSAGE value="added a sorting method. might need to add more calls to it; search is acting wonky" />
     <MESSAGE value="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;" />
     <MESSAGE value="fixed methods writing to CSV(?)" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed methods writing to CSV(?)" />
+    <MESSAGE value="Ok back up to speed. I think the RecordID is just randomized" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ok back up to speed. I think the RecordID is just randomized" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
+          <line>95</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
+          <line>126</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/BPlusTreeMain.java</url>
-          <line>113</line>
-          <option name="timeStamp" value="24" />
+          <line>66</line>
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="bTree.root.children[0].keyValues[0]" />
+        <watch expression="bTree.root.keyValues" />
       </configuration>
     </watches-manager>
   </component>
