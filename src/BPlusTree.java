@@ -71,12 +71,20 @@ class BPlusTree {
         return -1;
     }
 
+    /**
+     * Recursively insert a new node
+     * Split when the node is full
+     * @param node
+     * @param entry
+     * @param newChildEntry
+     * @return
+     */
     private newChildEntry insertHelper(BPlusTreeNode node, KVPair entry, newChildEntry newChildEntry) {
         // 1) If node is a non-leaf node (N)
         if (!node.leaf) {
             // Choose subtree and recursively call method
             int i = 1;
-            while (i < node.size && entry.key >= node.keyValues[i].key) {
+            while (i < node.size && entry.key >= node.keyValues[i - 1].key) {
                 i++;
             }
             newChildEntry = insertHelper(node.children[i - 1], entry, newChildEntry);
@@ -489,7 +497,6 @@ class BPlusTree {
                             parent.keyValues[j] = parent.children[j+1].keyValues[0];
                         }
                         oldchildentry = null;
-                        return oldchildentry;
                     }
                     // merge
                     else {
@@ -515,8 +522,8 @@ class BPlusTree {
                         }
                         parent.size--;
                         parent.numChildren--;
-                        return oldchildentry;
                     }
+                    return oldchildentry;
                 }
             }
         }

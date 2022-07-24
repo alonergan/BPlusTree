@@ -34,6 +34,7 @@ insert 690 asdf asdf sociology FR 20 15
 insert 330 asdf asdf sociology FR 20 16
 insert 770 asdf asdf sociology FR 20 17
 search 84
+search 77
 delete 12
 search 10
 
