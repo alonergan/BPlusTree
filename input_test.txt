@@ -1,4 +1,21 @@
 3
-delete 321114982
-delete 320874982
-delete 51135593
+insert 10 asdf asdf sociology FR 1
+insert 11 asdf asdf sociology FR 2
+insert 13 asdf asdf sociology FR 3
+insert 25 asdf asdf sociology FR 4
+insert 74 asdf asdf sociology FR 5
+insert 81 asdf asdf sociology FR 6
+insert 99 asdf asdf sociology FR 7
+insert 63 asdf asdf sociology FR 8
+insert 57 asdf asdf sociology FR 9
+insert 45 asdf asdf sociology FR 10
+insert 12 asdf asdf sociology FR 11
+insert 24 asdf asdf sociology FR 12
+insert 16 asdf asdf sociology FR 13
+insert 84 asdf asdf sociology FR 14
+insert 69 asdf asdf sociology FR 15
+insert 33 asdf asdf sociology FR 16
+insert 77 asdf asdf sociology FR 17
+search 84
+
+

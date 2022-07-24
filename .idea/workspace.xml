@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="Finished modifying CSV and studentsDB">
+    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_test.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BPlusTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlusTreeMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTreeMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlusTreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTreeNode.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +34,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Brando\IdeaProjects\BPlusTree" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Brando\IdeaProjects\BPlusTree" />
     </key>
   </component>
@@ -99,7 +105,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658457799990</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length">
+      <created>1658461907459</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1658461907459</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -123,22 +136,23 @@
     <MESSAGE value="h" />
     <MESSAGE value="Added methods to modify CSV file" />
     <MESSAGE value="Finished modifying CSV and studentsDB" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished modifying CSV and studentsDB" />
+    <MESSAGE value="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length" />
+    <option name="LAST_COMMIT_MESSAGE" value="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
-          <line>139</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
-          <line>221</line>
-          <option name="timeStamp" value="13" />
+          <url>file://$PROJECT_DIR$/src/BPlusTreeMain.java</url>
+          <line>112</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="bTree.root.children[0].keyValues[0]" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

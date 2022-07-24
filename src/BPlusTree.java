@@ -29,12 +29,6 @@ class BPlusTree {
     }
 
     long search(long studentId) {
-        /*
-         * TODO:
-         * Implement this function to search in the B+Tree.
-         * Return recordID for the given StudentID.
-         * Otherwise, print out a message that the given studentId has not been found in the table and return -1.
-         */
         if (root == null) {
             System.out.println("Tree empty: Root is null");
         } else {
@@ -93,6 +87,8 @@ class BPlusTree {
                     node.children[node.numChildren] = newChildEntry.child;
                     node.numChildren++;
                     node.size++;
+                    // Sort key/value pairs and children
+                    node.sortNode();
                     return null;
                 }
                 // If no space in interior node, must split
@@ -108,13 +104,13 @@ class BPlusTree {
                     System.arraycopy(tmp.keyValues, 0, node.keyValues, 0, t); // First t entries and t+1 children stay
                     System.arraycopy(tmp.children, 0, node.children, 0, t + 1);
                     node.size = t;
-                    node.numChildren = t+1;
+                    node.numChildren = t + 1;
 
                     // Fill right node
                     System.arraycopy(tmp.keyValues, t, node2.keyValues, 0, tmp.keyValues.length - t); // Rest go into split node
                     System.arraycopy(tmp.children, t + 1, node2.children, 0, tmp.children.length - (t + 1));
                     node2.size = tmp.keyValues.length - t;
-                    node2.numChildren = tmp.children.length - (t+1);
+                    node2.numChildren = tmp.children.length - (t + 1);
 
                     // Add newChildEntry to parent
                     node2.keyValues[node2.size] = newChildEntry.keyValue; // Add new key
@@ -157,6 +153,12 @@ class BPlusTree {
                 BPlusTreeNode leaf2 = new BPlusTreeNode(t, true);   // Right node of split leaf
                 System.arraycopy(node.keyValues, 0, tmp, 0, node.keyValues.length); // Copy vals into tmp
                 tmp[max] = entry; // Add new entry before split
+                /** Sort KV pairs. Since leaf is full, no issues with NullPointerException with CompareTo Override
+                 *  method. */
+                Arrays.sort(tmp, (a, b) -> {
+                    if (a.key < b.key) return -1;
+                    else return 1;
+                });
                 node.clearKeys(); // Clear current node
                 System.arraycopy(tmp, 0, node.keyValues, 0, t); // First t entries stay
                 System.arraycopy(tmp, t, leaf2.keyValues, 0, tmp.length - t); // Rest go into split node
@@ -198,7 +200,7 @@ class BPlusTree {
     }
 
     BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
-        
+
         // if node pointer is a non leaf 
         if (!current.leaf) {
             // choose subtree
@@ -220,18 +222,18 @@ class BPlusTree {
                 boolean found = false;
 
                 // current.children array is updated here
-                for (i = 0; i< current.numChildren; i++) {
+                for (i = 0; i < current.numChildren; i++) {
                     if (current.children[i] == oldchildentry) {
                         found = true;
                     }
                     // edge case: deleting last entry/child in array
-                    if (i == current.numChildren-1) {
+                    if (i == current.numChildren - 1) {
                         current.children[i] = null;
                         break;
                     }
                     //update values in array
                     if ((found == true) && (i != current.numChildren - 1)) {
-                        current.children[i] = current.children[i+1];
+                        current.children[i] = current.children[i + 1];
                     }
                 }
                 current.numChildren--;
@@ -243,73 +245,72 @@ class BPlusTree {
                 // else: get a sibling of current (Algo states we can use parent pointer to find sibling)
                 else {
                     // finding index of current
-                    int j =0;
+                    int j = 0;
                     while (current != parent.children[j]) {
                         j++;
                     }
                     // if current is the end node (must choose left sibling) j-1
-                    if (j == parent.numChildren -1) {
+                    if (j == parent.numChildren - 1) {
                         // if sibling has entries to spare: redistribute evenly
-                        if (parent.children[j-1].size > this.t) {
-                            int totalkeys = parent.children[j-1].size + parent.children[j].size;
-                            int entriestotake = parent.children[j-1].size - (int)Math.floor(totalkeys/2);
-                            int sibsize = parent.children[j-1].size;
+                        if (parent.children[j - 1].size > this.t) {
+                            int totalkeys = parent.children[j - 1].size + parent.children[j].size;
+                            int entriestotake = parent.children[j - 1].size - (int) Math.floor(totalkeys / 2);
+                            int sibsize = parent.children[j - 1].size;
                             // redistribute thru parent
-                            for (i =0; i<entriestotake; i++) {
+                            for (i = 0; i < entriestotake; i++) {
                                 // make space in current
-                                for (int c =0; c< current.size; c++) {
-                                    current.keyValues[c+1] = current.keyValues[c];
+                                for (int c = 0; c < current.size; c++) {
+                                    current.keyValues[c + 1] = current.keyValues[c];
                                 }
-                                for (int b =0; b< current.numChildren; b++) {
-                                    current.children[b+1] = current.children[b];
+                                for (int b = 0; b < current.numChildren; b++) {
+                                    current.children[b + 1] = current.children[b];
                                 }
                                 // add parent to current.keyvals[0], update current.size
-                                current.keyValues[0] = parent.keyValues[j-1];
+                                current.keyValues[0] = parent.keyValues[j - 1];
                                 current.size++;
                                 // add sibling child to current.children[0]
-                                current.children[0] = parent.children[j-1].children[sibsize - i];
-                                parent.children[j-1].numChildren--;
+                                current.children[0] = parent.children[j - 1].children[sibsize - i];
+                                parent.children[j - 1].numChildren--;
                                 current.numChildren++;
                                 // put sibling keyval into parent, update sibling.size
-                                parent.keyValues[j-1]= parent.children[j-1].keyValues[sibsize - i-1];
-                                parent.children[j-1].size--;
+                                parent.keyValues[j - 1] = parent.children[j - 1].keyValues[sibsize - i - 1];
+                                parent.children[j - 1].size--;
                             }
                             oldchildentry = null;
                             return oldchildentry;
-                        }
-                        else { // merge
+                        } else { // merge
                             oldchildentry = parent.children[j];
-                            int entriestomove = this.t -1;
+                            int entriestomove = this.t - 1;
                             // pull parent keyval into sibling (node on left)
-                            parent.children[j-1].keyValues[this.t] = parent.keyValues[j-1];
-                            parent.children[j-1].size++;
+                            parent.children[j - 1].keyValues[this.t] = parent.keyValues[j - 1];
+                            parent.children[j - 1].size++;
                             parent.size--;
                             // bring in leftmost pointer in M
-                            parent.children[j-1].children[this.t+1] = current.children[0];
-                            parent.children[j-1].numChildren++;
+                            parent.children[j - 1].children[this.t + 1] = current.children[0];
+                            parent.children[j - 1].numChildren++;
                             current.numChildren--;
                             // bring in rest of M
-                            for(int a=0; a<entriestomove; a++) {
+                            for (int a = 0; a < entriestomove; a++) {
                                 // first bring in key
-                                parent.children[j-1].keyValues[this.t + a+ 1] = current.keyValues[a];
-                                parent.children[j-1].size++;
+                                parent.children[j - 1].keyValues[this.t + a + 1] = current.keyValues[a];
+                                parent.children[j - 1].size++;
                                 current.size--;
                                 // then children pters
-                                parent.children[j-1].children[this.t+2+a] = current.children[a+1];
-                                parent.children[j-1].numChildren++;
+                                parent.children[j - 1].children[this.t + 2 + a] = current.children[a + 1];
+                                parent.children[j - 1].numChildren++;
                                 current.numChildren--;
                             }
                             // discard M
                             parent.children[j] = null;
                             // update parent array for children and keyvals
                             parent.numChildren--;
-                            for(int p = j-1; p< parent.size; p++) {
-                                parent.keyValues[p] = parent.keyValues[p+1];
-                                parent.children[p+1] = parent.children[p+2];
+                            for (int p = j - 1; p < parent.size; p++) {
+                                parent.keyValues[p] = parent.keyValues[p + 1];
+                                parent.children[p + 1] = parent.children[p + 2];
                             }
                             // update root if needed
-                            if (parent == this.root && parent.numChildren==0) {
-                                this.root = parent.children[j-1];
+                            if (parent == this.root && parent.numChildren == 0) {
+                                this.root = parent.children[j - 1];
                             }
                             return oldchildentry;
                         }
@@ -318,65 +319,64 @@ class BPlusTree {
                     // Otherwise choose the sibling to the right j+1 (current is the leftmost node)
                     else {
                         // if sibling has entries to spare: redistribute evenly
-                        if (parent.children[j+1].size > this.t) {
-                            int totalkeys = parent.children[j+1].size + parent.children[j].size;
-                            int entriestotake = parent.children[j+1].size - (int)Math.floor(totalkeys/2);
-                            int sibsize = parent.children[j+1].size;
+                        if (parent.children[j + 1].size > this.t) {
+                            int totalkeys = parent.children[j + 1].size + parent.children[j].size;
+                            int entriestotake = parent.children[j + 1].size - (int) Math.floor(totalkeys / 2);
+                            int sibsize = parent.children[j + 1].size;
                             // redistribute thru parent
-                            for (i= 0; i< entriestotake; i++) {
+                            for (i = 0; i < entriestotake; i++) {
                                 // bring down parent
                                 current.keyValues[current.size] = parent.keyValues[j];
                                 current.size++;
                                 // bring in sibling child
-                                current.children[current.numChildren] = parent.children[j+1].children[0];
+                                current.children[current.numChildren] = parent.children[j + 1].children[0];
                                 current.numChildren++;
-                                parent.children[j+1].numChildren--;
+                                parent.children[j + 1].numChildren--;
                                 // put sibling keyval into parent, update size
-                                parent.keyValues[j] = parent.children[j+1].keyValues[0];
-                                parent.children[j+1].size--;
+                                parent.keyValues[j] = parent.children[j + 1].keyValues[0];
+                                parent.children[j + 1].size--;
                                 // update sibling
-                                for (int c = 0; c< sibsize-i; c++) {
-                                    parent.children[j+1].keyValues[c] = parent.children[j+1].keyValues[c+1];
+                                for (int c = 0; c < sibsize - i; c++) {
+                                    parent.children[j + 1].keyValues[c] = parent.children[j + 1].keyValues[c + 1];
                                 }
-                                for (int b = 0; b< parent.children[j+1].numChildren +1; b++) {
-                                    parent.children[j+1].children[b] = parent.children[j+1].children[b+1];
+                                for (int b = 0; b < parent.children[j + 1].numChildren + 1; b++) {
+                                    parent.children[j + 1].children[b] = parent.children[j + 1].children[b + 1];
                                 }
                             }
                             oldchildentry = null;
                             return oldchildentry;
-                        }
-                        else { // merge
-                            oldchildentry = parent.children[j+1];
-                            int entriestomove = parent.children[j+1].size;
+                        } else { // merge
+                            oldchildentry = parent.children[j + 1];
+                            int entriestomove = parent.children[j + 1].size;
                             // pull parent keyval into current (node on left)
-                            current.keyValues[this.t-1] = parent.keyValues[j];
+                            current.keyValues[this.t - 1] = parent.keyValues[j];
                             parent.size--;
                             current.size++;
                             // bring in leftmost pointer in M
-                            current.children[this.t] = parent.children[j+1].children[0];
+                            current.children[this.t] = parent.children[j + 1].children[0];
                             current.numChildren++;
-                            parent.children[j+1].numChildren--;
+                            parent.children[j + 1].numChildren--;
                             // bring in rest of M
-                            for(int a=0; a<entriestomove; a++) {
+                            for (int a = 0; a < entriestomove; a++) {
                                 // first bring in key
-                                current.keyValues[this.t + a] = parent.children[j+1].keyValues[a];
+                                current.keyValues[this.t + a] = parent.children[j + 1].keyValues[a];
                                 current.size++;
-                                parent.children[j+1].size--;
+                                parent.children[j + 1].size--;
                                 // then children pters
-                                current.children[this.t+1+a] = parent.children[j+1].children[a+1];
+                                current.children[this.t + 1 + a] = parent.children[j + 1].children[a + 1];
                                 current.numChildren++;
-                                parent.children[j+1].numChildren--;
+                                parent.children[j + 1].numChildren--;
                             }
                             // discard M
-                            parent.children[j+1] = null;
+                            parent.children[j + 1] = null;
                             parent.numChildren--;
                             // update parent array for children and keyvals
-                            for(int p = j; p< parent.size; p++) {
-                                parent.keyValues[p] = parent.keyValues[p+1];
-                                parent.children[p+1] = parent.children[p+2];
+                            for (int p = j; p < parent.size; p++) {
+                                parent.keyValues[p] = parent.keyValues[p + 1];
+                                parent.children[p + 1] = parent.children[p + 2];
                             }
                             // update root if needed
-                            if (parent == this.root && parent.numChildren==0) {
+                            if (parent == this.root && parent.numChildren == 0) {
                                 this.root = current;
                             }
                             return oldchildentry;
@@ -390,18 +390,18 @@ class BPlusTree {
             int i;
             // remove entry
             boolean found = false;
-            for (i = 0; i< current.size; i++) {
+            for (i = 0; i < current.size; i++) {
                 if (current.keyValues[i].key == studentId) {
                     found = true;
                 }
                 // edge case: deleting last entry/child in array
-                if (i == current.size-1) {
+                if (i == current.size - 1) {
                     current.keyValues[i] = null;
                     break;
                 }
                 //update values in array
-                if ((found == true) && (i != current.size-1)) {
-                    current.keyValues[i] = current.keyValues[i+1];
+                if ((found == true) && (i != current.size - 1)) {
+                    current.keyValues[i] = current.keyValues[i + 1];
                 }
             }
             current.size--;
@@ -409,51 +409,49 @@ class BPlusTree {
             if (current.size >= this.t) {
                 oldchildentry = null;
                 return oldchildentry;
-            }
-            else {
+            } else {
                 // get a sibling (first find index in parent)
-                int j =0;
+                int j = 0;
                 while (current != parent.children[j]) {
                     j++;
                 }
                 // if current is the end node (must choose left sibling) j-1
-                if (j == parent.numChildren -1) {
+                if (j == parent.numChildren - 1) {
                     // redistribute
-                    if (parent.children[j-1].size > this.t) {
-                        int totalkeys = parent.children[j-1].size + parent.children[j].size;
-                        int entriestotake = parent.children[j-1].size - (int)Math.floor(totalkeys/2);
-                        int sibsize = parent.children[j-1].size;
+                    if (parent.children[j - 1].size > this.t) {
+                        int totalkeys = parent.children[j - 1].size + parent.children[j].size;
+                        int entriestotake = parent.children[j - 1].size - (int) Math.floor(totalkeys / 2);
+                        int sibsize = parent.children[j - 1].size;
                         // redistribute thru parent
-                        for (i =0; i<entriestotake; i++) {
+                        for (i = 0; i < entriestotake; i++) {
                             // make space in current
-                            for (int c =0; c< current.size; c++) {
-                                current.keyValues[c+1] = current.keyValues[c];
+                            for (int c = 0; c < current.size; c++) {
+                                current.keyValues[c + 1] = current.keyValues[c];
                             }
                             // add leaf from left sibling to current.keyvals[0], update sizes
-                            current.keyValues[0] = parent.children[j-1].keyValues[sibsize-i-1];
+                            current.keyValues[0] = parent.children[j - 1].keyValues[sibsize - i - 1];
                             current.size++;
-                            parent.children[j-1].size--;
+                            parent.children[j - 1].size--;
                             // put sibling keyval into parent
-                            parent.keyValues[j-1]= parent.children[j-1].keyValues[sibsize - i-1];
+                            parent.keyValues[j - 1] = parent.children[j - 1].keyValues[sibsize - i - 1];
                         }
                         oldchildentry = null;
                         return oldchildentry;
-                    }
-                    else { // merge
+                    } else { // merge
                         oldchildentry = current;
                         int entriestomove = current.size;
-                        for (int v =0; v< entriestomove; v++) {
+                        for (int v = 0; v < entriestomove; v++) {
                             // move entries into left sibling
-                            parent.children[j-1].keyValues[this.t + v] = current.keyValues[v];
-                            parent.children[j-1].size++;
+                            parent.children[j - 1].keyValues[this.t + v] = current.keyValues[v];
+                            parent.children[j - 1].size++;
                             current.size--;
                         }
                         // adjust sibling pointers (should be null now as current is end node)
-                        parent.children[j-1].next = null;
+                        parent.children[j - 1].next = null;
                         // delete parent key and pointer, update arrays
-                        for (int g = j-1; g<parent.size; g++) {
-                            parent.keyValues[g] = parent.keyValues[g+1];
-                            parent.children[g+1] = parent.children[g+2];
+                        for (int g = j - 1; g < parent.size; g++) {
+                            parent.keyValues[g] = parent.keyValues[g + 1];
+                            parent.children[g + 1] = parent.children[g + 2];
                         }
                         parent.size--;
                         parent.numChildren--;
@@ -463,47 +461,46 @@ class BPlusTree {
                 // choose right sibling j+1
                 else {
                     // redistribute
-                    if (parent.children[j+1].size > this.t) {
-                        int totalkeys = parent.children[j+1].size + parent.children[j].size;
-                        int entriestotake = parent.children[j+1].size - (int)Math.floor(totalkeys/2);
-                        int sibsize = parent.children[j+1].size;
+                    if (parent.children[j + 1].size > this.t) {
+                        int totalkeys = parent.children[j + 1].size + parent.children[j].size;
+                        int entriestotake = parent.children[j + 1].size - (int) Math.floor(totalkeys / 2);
+                        int sibsize = parent.children[j + 1].size;
                         // redistribute thru parent
-                        for (i= 0; i< entriestotake; i++) {
+                        for (i = 0; i < entriestotake; i++) {
                             // bring in sibling key, update sizes
-                            current.keyValues[current.size] = parent.children[j+1].keyValues[0];
+                            current.keyValues[current.size] = parent.children[j + 1].keyValues[0];
                             current.size++;
-                            parent.children[j+1].size--;
+                            parent.children[j + 1].size--;
                             // update sibling
-                            for (int c = 0; c< sibsize-i; c++) {
-                                parent.children[j+1].keyValues[c] = parent.children[j+1].keyValues[c+1];
+                            for (int c = 0; c < sibsize - i; c++) {
+                                parent.children[j + 1].keyValues[c] = parent.children[j + 1].keyValues[c + 1];
                             }
                             // put sibling keyval into parent
-                            parent.keyValues[j] = parent.children[j+1].keyValues[0];
+                            parent.keyValues[j] = parent.children[j + 1].keyValues[0];
                         }
                         oldchildentry = null;
                         return oldchildentry;
                     }
                     // merge
                     else {
-                        oldchildentry = parent.children[j+1];
-                        int entriestomove = parent.children[j+1].size;
-                        for (int v =0; v< entriestomove; v++) {
+                        oldchildentry = parent.children[j + 1];
+                        int entriestomove = parent.children[j + 1].size;
+                        for (int v = 0; v < entriestomove; v++) {
                             // move entries into current
-                            current.keyValues[this.t + v] = parent.children[j+1].keyValues[v];
+                            current.keyValues[this.t + v] = parent.children[j + 1].keyValues[v];
                             current.size++;
-                            parent.children[j+1].size--;
+                            parent.children[j + 1].size--;
                         }
                         // adjust sibling pointers (should be null here if j+1 is end node)
-                        if (j+1 == parent.numChildren-1) {
+                        if (j + 1 == parent.numChildren - 1) {
                             current.next = null;
-                        }
-                        else {
-                            current.next = parent.children[j+2];
+                        } else {
+                            current.next = parent.children[j + 2];
                         }
                         // delete parent key and pointer, update arrays
-                        for (int g = j; g<parent.size; g++) {
-                            parent.keyValues[g] = parent.keyValues[g+1];
-                            parent.children[g+1] = parent.children[g+2];
+                        for (int g = j; g < parent.size; g++) {
+                            parent.keyValues[g] = parent.keyValues[g + 1];
+                            parent.children[g + 1] = parent.children[g + 2];
                         }
                         parent.size--;
                         parent.numChildren--;
@@ -525,8 +522,7 @@ class BPlusTree {
         // cant delete here
         if (this.root == null) {
             return false;
-        }
-        else {
+        } else {
             deleteHelper(null, this.root, studentId, null);
         }
         return true;
@@ -553,14 +549,5 @@ class BPlusTree {
         } while (current != null);
 
         return listOfRecordID;
-    }
-
-    private void sortKeys(BPlusTreeNode node) {
-        KVPair[] key_values = node.keyValues;
-        Arrays.sort(key_values, (a, b) -> {
-            if (a.key == 0) return 1;
-            if (b.key == 0) return -1;
-            return Long.signum(a.key - b.key);
-        });
     }
 }

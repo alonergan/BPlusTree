@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 class newChildEntry {
     KVPair keyValue;
     BPlusTreeNode child;
@@ -57,7 +59,7 @@ class BPlusTreeNode {
     BPlusTreeNode next;
 
     // Constructor
-    BPlusTreeNode(int t, boolean leaf) {
+    public BPlusTreeNode(int t, boolean leaf) {
         this.t = t;
         this.leaf = leaf;
         this.size = 0;
@@ -69,17 +71,63 @@ class BPlusTreeNode {
         this.numChildren = 0;
     }
 
-    void clearKeys() {
+    /** Clears the keys */
+    public void clearKeys() {
         for (int i = 0; i < size; i++) {
             this.keyValues[i] = null;
         }
         this.size = 0;
     }
 
-    void clearChildren() {
+    /** Clears the children */
+    public void clearChildren() {
         for (int i = 0; i < numChildren; i++) {
             this.children[i] = null;
         }
         this.numChildren = 0;
+    }
+
+    /**
+     * QuickSort algorithm that keeps null/0 values at the end of the array
+     * https://crunchify.com/in-java-how-to-move-all-0s-to-end-of-array-preserving-order-of-an-array/
+     */
+    private void sortKeys() {
+        KVPair[] kvPairs = this.keyValues;
+        KVPair[] temp = new KVPair[this.size];
+        for (int i = 0; i < this.size; i++) {
+            temp[i] = this.keyValues[i];
+        }
+        Arrays.sort(temp, (a, b) -> {
+            if (a.key < b.key) return -1;
+            else return 1;
+        });
+        for (int i = 0; i < this.size; i++)
+            this.keyValues[i] = temp[i];
+    }
+
+    /** Sorts the keys and nodes
+     *  Sorting is crucial for when the user searches a key
+     */
+    public void sortNode() {
+        // error check space
+        if (this.keyValues == null) return;
+
+        sortKeys();
+        if (!this.leaf) return;
+        BPlusTreeNode newChildrenOrder[] = new BPlusTreeNode[2 * t + 1];
+        BPlusTreeNode temp = null;
+        for (int i = 0; i < this.size; i++) {
+            for (int j = 0; j < this.numChildren; j++) {
+                temp = this.children[j];
+                if (temp.keyValues[temp.size -1].key < this.keyValues[i].key) {
+                    newChildrenOrder[i] = this.children[i];
+                    break;
+                }
+                if (i == this.size - 1 && temp.keyValues[0].key >= this.keyValues[i].key) {
+                    newChildrenOrder[i] = this.children[i];
+                }
+            }
+        }
+        this.children = newChildrenOrder;
     }
 }
