@@ -282,8 +282,8 @@ class BPlusTree {
                             int entriestomove = this.t -1;
                             // pull parent keyval into sibling (node on left)
                             parent.children[j-1].keyValues[this.t] = parent.keyValues[j-1];
-                            parent.size--;
                             parent.children[j-1].size++;
+                            parent.size--;
                             // bring in leftmost pointer in M
                             parent.children[j-1].children[this.t+1] = current.children[0];
                             parent.children[j-1].numChildren++;
@@ -301,7 +301,12 @@ class BPlusTree {
                             }
                             // discard M
                             parent.children[j] = null;
+                            // update parent array for children and keyvals
                             parent.numChildren--;
+                            for(int p = j-1; p< parent.size; p++) {
+                                parent.keyValues[p] = parent.keyValues[p+1];
+                                parent.children[p+1] = parent.children[p+2];
+                            }
                             // update root if needed
                             if (parent == this.root && parent.numChildren==0) {
                                 this.root = parent.children[j-1];
@@ -365,6 +370,11 @@ class BPlusTree {
                             // discard M
                             parent.children[j+1] = null;
                             parent.numChildren--;
+                            // update parent array for children and keyvals
+                            for(int p = j; p< parent.size; p++) {
+                                parent.keyValues[p] = parent.keyValues[p+1];
+                                parent.children[p+1] = parent.children[p+2];
+                            }
                             // update root if needed
                             if (parent == this.root && parent.numChildren==0) {
                                 this.root = current;
@@ -430,7 +440,7 @@ class BPlusTree {
                         return oldchildentry;
                     }
                     else { // merge
-                    
+
                     }
                 }
                 // choose right sibling j+1
@@ -446,12 +456,12 @@ class BPlusTree {
                             current.keyValues[current.size] = parent.children[j+1].keyValues[0];
                             current.size++;
                             parent.children[j+1].size--;
-                            // put sibling keyval into parent, update size
-                            parent.keyValues[j] = parent.children[j+1].keyValues[0];
                             // update sibling
                             for (int c = 0; c< sibsize-i; c++) {
                                 parent.children[j+1].keyValues[c] = parent.children[j+1].keyValues[c+1];
                             }
+                            // put sibling keyval into parent
+                            parent.keyValues[j] = parent.children[j+1].keyValues[0];
                         }
                         oldchildentry = null;
                         return oldchildentry;
@@ -465,25 +475,6 @@ class BPlusTree {
         }
         // shouldn't ever reach this?
         return null;
-    }
-
-
-    int redistFind(int j, BPlusTreeNode parent) {
-        /*
-         * Finds if redistribution option exists, returns redistributors
-         * index if found. Otherwise -1.
-         */
-        if (j != parent.numChildren) {
-            if(parent.children[j+1].size > this.t) {
-                return j+1;
-            }
-        }
-        else if(j != 0) {
-            if(parent.children[j-1].size > this.t) {
-                return j-1;
-            }
-        }
-        return -1;
     }
 
     boolean delete(long studentId) {
