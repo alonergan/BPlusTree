@@ -450,13 +450,13 @@ class BPlusTree {
                         }
                         // adjust sibling pointers (should be null now as current is end node)
                         parent.children[j-1].next = null;
+                        parent.size--;
+                        parent.numChildren--;
                         // delete parent key and pointer, update arrays
                         for (int g = j-1; g<parent.size; g++) {
                             parent.keyValues[g] = parent.keyValues[g+1];
                             parent.children[g+1] = parent.children[g+2];
                         }
-                        parent.size--;
-                        parent.numChildren--;
                         return oldchildentry;
                     }
                 }
@@ -500,13 +500,13 @@ class BPlusTree {
                         else {
                             current.next = parent.children[j+2];
                         }
+                        parent.size--;
+                        parent.numChildren--;
                         // delete parent key and pointer, update arrays
                         for (int g = j; g<parent.size; g++) {
                             parent.keyValues[g] = parent.keyValues[g+1];
                             parent.children[g+1] = parent.children[g+2];
                         }
-                        parent.size--;
-                        parent.numChildren--;
                         return oldchildentry;
                     }
                 }

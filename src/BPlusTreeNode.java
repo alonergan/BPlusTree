@@ -1,24 +1,5 @@
-class newChildEntry {
-    KVPair keyValue;
-    BPlusTreeNode child;
 
-    public newChildEntry(KVPair keyValue, BPlusTreeNode child) {
-        this.keyValue = keyValue;
-        this.child = child;
-    }
-}
-
-class KVPair {
-    long key;
-    long value;
-
-    KVPair(long key, long value) {
-        this.key = key;
-        this.value = value;
-    }
-}
-
-class BPlusTreeNode {
+public class BPlusTreeNode {
 
     /**
      * New storage for key-value pairs. Easier to sort/compare, since recordId corresponds to studentId
@@ -57,7 +38,7 @@ class BPlusTreeNode {
     BPlusTreeNode next;
 
     // Constructor
-    BPlusTreeNode(int t, boolean leaf) {
+    public BPlusTreeNode(int t, boolean leaf) {
         this.t = t;
         this.leaf = leaf;
         this.size = 0;
@@ -69,14 +50,14 @@ class BPlusTreeNode {
         this.numChildren = 0;
     }
 
-    void clearKeys() {
+    public void clearKeys() {
         for (int i = 0; i < size; i++) {
             this.keyValues[i] = null;
         }
         this.size = 0;
     }
 
-    void clearChildren() {
+    public void clearChildren() {
         for (int i = 0; i < numChildren; i++) {
             this.children[i] = null;
         }
