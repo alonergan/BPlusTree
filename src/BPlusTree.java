@@ -440,7 +440,24 @@ class BPlusTree {
                         return oldchildentry;
                     }
                     else { // merge
-
+                        oldchildentry = current;
+                        int entriestomove = current.size;
+                        for (int v =0; v< entriestomove; v++) {
+                            // move entries into left sibling
+                            parent.children[j-1].keyValues[this.t + v] = current.keyValues[v];
+                            parent.children[j-1].size++;
+                            current.size--;
+                        }
+                        // adjust sibling pointers (should be null now as current is end node)
+                        parent.children[j-1].next = null;
+                        // delete parent key and pointer, update arrays
+                        for (int g = j-1; g<parent.size; g++) {
+                            parent.keyValues[g] = parent.keyValues[g+1];
+                            parent.children[g+1] = parent.children[g+2];
+                        }
+                        parent.size--;
+                        parent.numChildren--;
+                        return oldchildentry;
                     }
                 }
                 // choose right sibling j+1
@@ -468,13 +485,33 @@ class BPlusTree {
                     }
                     // merge
                     else {
-
+                        oldchildentry = parent.children[j+1];
+                        int entriestomove = parent.children[j+1].size;
+                        for (int v =0; v< entriestomove; v++) {
+                            // move entries into current
+                            current.keyValues[this.t + v] = parent.children[j+1].keyValues[v];
+                            current.size++;
+                            parent.children[j+1].size--;
+                        }
+                        // adjust sibling pointers (should be null here if j+1 is end node)
+                        if (j+1 == parent.numChildren-1) {
+                            current.next = null;
+                        }
+                        else {
+                            current.next = parent.children[j+2];
+                        }
+                        // delete parent key and pointer, update arrays
+                        for (int g = j; g<parent.size; g++) {
+                            parent.keyValues[g] = parent.keyValues[g+1];
+                            parent.children[g+1] = parent.children[g+2];
+                        }
+                        parent.size--;
+                        parent.numChildren--;
+                        return oldchildentry;
                     }
                 }
             }
         }
-        // shouldn't ever reach this?
-        return null;
     }
 
     boolean delete(long studentId) {
