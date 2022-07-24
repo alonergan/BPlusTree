@@ -444,7 +444,7 @@ class BPlusTree {
                         int entriestomove = current.size;
                         for (int v =0; v< entriestomove; v++) {
                             // move entries into left sibling
-                            parent.children[j-1].keyValues[this.t + v] = current.keyValues[v];
+                            parent.children[j-1].keyValues[this.t + v-1] = current.keyValues[v];
                             parent.children[j-1].size++;
                             current.size--;
                         }
@@ -489,7 +489,7 @@ class BPlusTree {
                         int entriestomove = parent.children[j+1].size;
                         for (int v =0; v< entriestomove; v++) {
                             // move entries into current
-                            current.keyValues[this.t + v] = parent.children[j+1].keyValues[v];
+                            current.keyValues[this.t + v-1] = parent.children[j+1].keyValues[v];
                             current.size++;
                             parent.children[j+1].size--;
                         }
@@ -551,7 +551,6 @@ class BPlusTree {
             }
             current = current.next;
         } while (current != null);
-
         return listOfRecordID;
     }
 
