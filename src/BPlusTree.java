@@ -530,6 +530,9 @@ class BPlusTree {
         if (this.root == null) {
             return false;
         }
+        if (search(studentId) == -1) {
+            return false;
+        }
         else {
             deleteHelper(null, this.root, studentId, null);
         }
@@ -550,8 +553,10 @@ class BPlusTree {
         // Traverse leaf nodes
         do {
             // Get all recordID for current leaf node and move to sibling
-            for (int i = 0; i < current.size; i++) {
+            for (int i = 0; i < this.max; i++) {
+                if (current.keyValues[i] !=null) {
                 listOfRecordID.add(current.keyValues[i].value);
+                }
             }
             current = current.next;
         } while (current != null);
