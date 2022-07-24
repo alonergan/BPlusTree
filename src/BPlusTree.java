@@ -79,7 +79,7 @@ class BPlusTree {
      * @param newChildEntry
      * @return
      */
-    private newChildEntry insertHelper(BPlusTreeNode node, KVPair entry, newChildEntry newChildEntry) {
+    private NewChildEntry insertHelper(BPlusTreeNode node, KVPair entry, NewChildEntry newChildEntry) {
         // 1) If node is a non-leaf node (N)
         if (!node.leaf) {
             // Choose subtree and recursively call method
@@ -95,8 +95,8 @@ class BPlusTree {
             }
             // We split child, must insert newChildEntry into parent
             else {
-                // If node has space insert key
-                if (node.size < max) {
+                // If node has space, insert key
+                if (node.size < this.max) {
                     node.keyValues[node.size] = newChildEntry.keyValue;
                     node.children[node.numChildren] = newChildEntry.child;
                     node.numChildren++;
@@ -131,9 +131,9 @@ class BPlusTree {
                     node2.children[node2.numChildren] = newChildEntry.child; // Add child reference
                     node2.size++;
                     node2.numChildren++;
-                    // Sort new node
-                    node2.sortNode();
-                    newChildEntry = new newChildEntry(node2.keyValues[0], node2);
+                    // Sort new node ?
+                    // node2.sortNode();
+                    newChildEntry = new NewChildEntry(node2.keyValues[0], node2);
                     // If root node was just split, revise tree
                     if (node == root) {
                         BPlusTreeNode newRoot = new BPlusTreeNode(t, false); // Create new root and set values
@@ -176,7 +176,7 @@ class BPlusTree {
                 node.clearKeys(); // Clear current node
                 System.arraycopy(tmp, 0, node.keyValues, 0, t); // First t entries stay
                 System.arraycopy(tmp, t, leaf2.keyValues, 0, tmp.length - t); // Rest go into split node
-                newChildEntry = new newChildEntry(leaf2.keyValues[0], leaf2);
+                newChildEntry = new NewChildEntry(leaf2.keyValues[0], leaf2);
                 node.size = t;
                 leaf2.size = tmp.length - t;
                 node.next = leaf2;

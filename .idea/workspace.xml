@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="Added extra insertions to input_test.txt&#10;Fixed NullPointerException (IndexOutOfBounds) from insert">
+    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="h">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Student_test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Student_test.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input_test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_test.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlusTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/newChildEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NewChildEntry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658696603204</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="h">
+      <created>1658702646927</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1658702646927</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -169,7 +177,6 @@
     <MESSAGE value="started work on a recursive insert method&#10;created a class for key-value pair" />
     <MESSAGE value="Issue with KeyValue name- changed to KVPair" />
     <MESSAGE value="Insert's like 75% done just need to make sure everything is connected the right way&#10;TODO: link sibling leaves, sort children[] when nodes are split/ reconsolidated" />
-    <MESSAGE value="h" />
     <MESSAGE value="Added methods to modify CSV file" />
     <MESSAGE value="Finished modifying CSV and studentsDB" />
     <MESSAGE value="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length" />
@@ -178,7 +185,8 @@
     <MESSAGE value="fixed methods writing to CSV(?)" />
     <MESSAGE value="Ok back up to speed. I think the RecordID is just randomized" />
     <MESSAGE value="Added extra insertions to input_test.txt&#10;Fixed NullPointerException (IndexOutOfBounds) from insert" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added extra insertions to input_test.txt&#10;Fixed NullPointerException (IndexOutOfBounds) from insert" />
+    <MESSAGE value="h" />
+    <option name="LAST_COMMIT_MESSAGE" value="h" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -187,6 +195,11 @@
           <url>file://$PROJECT_DIR$/src/BPlusTreeMain.java</url>
           <line>113</line>
           <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
+          <line>108</line>
+          <option name="timeStamp" value="40" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
