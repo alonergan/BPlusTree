@@ -29,12 +29,6 @@ class BPlusTree {
     }
 
     public long search(long studentId) {
-        /*
-         * TODO:
-         * Implement this function to search in the B+Tree.
-         * Return recordID for the given StudentID.
-         * Otherwise, print out a message that the given studentId has not been found in the table and return -1.
-         */
         if (root == null) {
             System.out.println("Tree empty: Root is null");
         } else {
@@ -70,7 +64,14 @@ class BPlusTree {
 //        System.out.println("studentID: " + studentId + " was not found in the tree");
         return -1;
     }
-
+    /**
+     * Recursively insert a new node
+     * Split when the node is full
+     * @param node the node being accessed/modified in this recursive call
+     * @param entry the Key/Record pair to add to the tree
+     * @param newChildEntry initially null
+     * @return null in the case of no splitting required, or a new child entry to add to the parent node
+     */
     private newChildEntry insertHelper(BPlusTreeNode node, KVPair entry, newChildEntry newChildEntry) {
         // 1) If node is a non-leaf node (N)
         if (!node.leaf) {
@@ -222,7 +223,11 @@ class BPlusTree {
             }
         }
     }
-
+    /**
+     * Insert a new key/value pair to the tree
+     * @param student the student whose StudentID and RecordID will be used to build the pairing
+     * @return this, ie the B+ tree
+     */
     public BPlusTree insert(Student student) {
         KVPair entry = new KVPair(student.studentId, student.recordId);
         // If root is null, create first node in tree
@@ -239,7 +244,14 @@ class BPlusTree {
 //        Scanner scanner = new Scanner();
         return this;
     }
-
+    /**
+     * Deletion recursive helper method
+     * @param parent the parent of the current node
+     * @param current the current node
+     * @param studentId the studentID we wish to delete
+     * @param oldchildentry the old entry to merge
+     * @return oldchildentry; if not null, merge or redistribute with sibling node
+     */
     private BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
         
         // if node pointer is a non leaf 
@@ -566,14 +578,12 @@ class BPlusTree {
             }
         }
     }
-
+    /**
+     * Delete a key/value pair corresponding to the StudentID, if it exists
+     * @param studentId the student's ID (key value)
+     * @return whether deletion was successful
+     */
     boolean delete(long studentId) {
-        /*
-         * TODO:
-         * Implement this function to delete in the B+Tree.
-         * Also, delete in student.csv after deleting in B+Tree, if it exists.
-         * Return true if the student is deleted successfully otherwise, return false.
-         */
 
         // cant delete here
         if (this.root == null) {
@@ -587,7 +597,10 @@ class BPlusTree {
         }
         return true;
     }
-
+    /**
+     * Build a list of recordIDs to print
+     * @return the list
+     */
     List<Long> print() {
 
         List<Long> listOfRecordID = new ArrayList<>();
