@@ -11,18 +11,19 @@ public class BPlusTreeMain {
 
     public static void main(String[] args) {
 
-        /** Read the input file -- input.txt */
+        /** Read the input file -- input.txt
+         *  replace params with (other) valid CSVs and input text files
+         */
         Scanner scan = null;
         File csvFile = null;
         try {
             csvFile = new File("Student_test.csv");
-            scan = new Scanner(new File("input.txt"));
+            scan = new Scanner(new File("input_test.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
 
         /** Read the minimum degree of B+Tree first */
-
         int degree = scan.nextInt();
 
         BPlusTree bTree = new BPlusTree(degree);
@@ -111,8 +112,8 @@ public class BPlusTreeMain {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //BREAKPOINT HERE
-        System.out.println("done");
+        //for breakpoint
+        //System.out.println("done");
     }
 
     private static List<Student> getStudents(File fp) {

@@ -1,3 +1,6 @@
+/**
+ * A new child entry to place inside a BPlusTreeNode's children[] and keyValues[] arrays
+ */
 public class NewChildEntry {
     KVPair keyValue;
     BPlusTreeNode child;

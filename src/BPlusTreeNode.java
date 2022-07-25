@@ -1,5 +1,6 @@
 import java.util.Arrays;
 
+/** Commented out; moved classes into individual files due to issues with compiling */
 //class newChildEntry {
 //    KVPair keyValue;
 //    BPlusTreeNode child;
@@ -88,8 +89,9 @@ class BPlusTreeNode {
     }
 
     /**
-     * QuickSort algorithm that keeps null/0 values at the end of the array
-     * https://crunchify.com/in-java-how-to-move-all-0s-to-end-of-array-preserving-order-of-an-array/
+     * Sort the Key/Value pairs based on the key
+     * Comparator/compareTo doesn't like when entries are null
+     * Copy all the non-null values to a temporary array and sort
      */
     private void sortKeys() {
         KVPair[] kvPairs = this.keyValues;
@@ -105,8 +107,9 @@ class BPlusTreeNode {
             this.keyValues[i] = temp[i];
     }
 
-    /** Sorts the keys and nodes
-     *  Sorting is crucial for when the user searches a key
+    /**
+     *  Sorts the keys and nodes
+     *  Sorting is crucial for retrieving a key. Call in insert (and delete?)
      */
     public void sortNode() {
         // error check space
