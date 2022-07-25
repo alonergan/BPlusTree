@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Comparator;
 
 /** Commented out; moved classes into individual files due to issues with compiling */
 //class newChildEntry {
@@ -94,17 +95,10 @@ class BPlusTreeNode {
      * Copy all the non-null values to a temporary array and sort
      */
     private void sortKeys() {
-        KVPair[] kvPairs = this.keyValues;
         KVPair[] temp = new KVPair[this.size];
-        for (int i = 0; i < this.size; i++) {
-            temp[i] = this.keyValues[i];
-        }
-        Arrays.sort(temp, (a, b) -> {
-            if (a.key < b.key) return -1;
-            else return 1;
-        });
-        for (int i = 0; i < this.size; i++)
-            this.keyValues[i] = temp[i];
+        System.arraycopy(this.keyValues, 0, temp, 0, this.size);
+        Arrays.sort(temp, Comparator.comparingLong(a -> a.key));
+        System.arraycopy(temp, 0, this.keyValues, 0, this.size);
     }
 
     /**
@@ -117,8 +111,8 @@ class BPlusTreeNode {
 
         sortKeys();
         if (!this.leaf) return;
-        BPlusTreeNode newChildrenOrder[] = new BPlusTreeNode[2 * t + 1];
-        BPlusTreeNode temp = null;
+        BPlusTreeNode[] newChildrenOrder = new BPlusTreeNode[2 * t + 1];
+        BPlusTreeNode temp;
         for (int i = 0; i < this.size; i++) {
             for (int j = 0; j < this.numChildren; j++) {
                 temp = this.children[j];

@@ -11,7 +11,7 @@ public class BPlusTreeMain {
 
     public static void main(String[] args) {
 
-        /** Read the input file -- input.txt
+        /* Read the input file -- input.txt
          *  replace params with (other) valid CSVs and input text files
          */
         Scanner scan = null;
@@ -98,7 +98,7 @@ public class BPlusTreeMain {
                             break;
                         }
                         case "print": {
-                            List<Long> listOfRecordID = new ArrayList<>();
+                            List<Long> listOfRecordID;
                             listOfRecordID = bTree.print();
                             System.out.println("List of recordIDs in B+Tree " + listOfRecordID.toString());
                             break;
