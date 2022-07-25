@@ -92,11 +92,26 @@ class BPlusTree {
                 }
                 // If no space in interior node, must split
                 else {
-                    // similar approach to splitting the leaf nodes
-                    BPlusTreeNode tmp = new BPlusTreeNode(t, true);     // Copy of array values
+                    BPlusTreeNode tmp = new BPlusTreeNode(t+1, true);     // Copy of array values
                     BPlusTreeNode node2 = new BPlusTreeNode(t, false);   // Right node of split node
                     System.arraycopy(node.keyValues, 0, tmp.keyValues, 0, node.keyValues.length); // Copy vals into tmp
                     System.arraycopy(node.children, 0, tmp.children, 0, node.children.length);
+                    boolean found = false;
+                    for (int p = 0; p< tmp.keyValues.length; p++) {
+                        if (found == false && newChildEntry.keyValue.key < tmp.keyValues[p].key) {
+                            found = true;
+                            // make space in tmp
+                            for(int j= node.keyValues.length; j> p; j--) {
+                                tmp.keyValues[j] = tmp.keyValues[j-1];
+                                tmp.children[j+1] = tmp.children[j];
+                            }
+                            // add new child entry
+                            tmp.keyValues[p] = newChildEntry.keyValue;
+                            tmp.children[p+1] = newChildEntry.child;
+                            // break
+                            break;
+                        }
+                    }
                     node.clearKeys(); // Clear current node
                     node.clearChildren();
 
@@ -106,21 +121,20 @@ class BPlusTree {
                     node.size = t;
                     node.numChildren = t+1;
 
+
                     // Fill right node
-                    System.arraycopy(tmp.keyValues, t, node2.keyValues, 0, tmp.keyValues.length - t); // Rest go into split node
-                    System.arraycopy(tmp.children, t + 1, node2.children, 0, tmp.children.length - (t + 1));
-                    node2.size = tmp.keyValues.length - t;
-                    node2.numChildren = tmp.children.length - (t+1);
-
+                    System.arraycopy(tmp.keyValues, t+1, node2.keyValues, 0, t); // Rest go into split node
+                    System.arraycopy(tmp.children, t + 1, node2.children, 0, t+1);
+                    node2.size = t;
+                    node2.numChildren = t+1;
                     // Add newChildEntry to parent
-                    node2.keyValues[node2.size] = newChildEntry.keyValue; // Add new key
-                    node2.children[node2.numChildren] = newChildEntry.child; // Add child reference
-                    node2.size++;
-                    node2.numChildren++;
-//                  Sort new node here?
-                    newChildEntry = new NewChildEntry(node2.keyValues[0], node2);
+                   // node2.keyValues[node2.size] = newChildEntry.keyValue; // Add new key
+                   // node2.children[node2.numChildren] = newChildEntry.child; // Add child reference
+                   // node2.size++;
+                   // node2.numChildren++;
+                    // Sort new node
                     node2.sortNode();
-
+                    newChildEntry = new newChildEntry(tmp.keyValues[t], node2);
                     // If root node was just split, revise tree
                     if (node == root) {
                         BPlusTreeNode newRoot = new BPlusTreeNode(t, false); // Create new root and set values
@@ -130,7 +144,6 @@ class BPlusTree {
                         newRoot.numChildren = 2;
                         newRoot.size = 1;
                         this.root = newRoot;
-                        this.root.sortNode();
                     }
                     return newChildEntry;
                 }
@@ -146,7 +159,25 @@ class BPlusTree {
             }
             // If node has space insert entry, set newChildEntry to null, return
             if (node.size < this.max) {
-                node.keyValues[node.size] = entry;
+                boolean found = false;
+                for (int i = 0; i< node.size; i++) {
+                    if (entry.key < node.keyValues[i].key && found == false) {
+                        found = true;
+
+                        // make space in node
+                        for(int j= node.size; j> i; j--) {
+                            node.keyValues[j] = node.keyValues[j-1];
+                        }
+
+                        node.keyValues[i] = entry;
+                        // break
+                        break;
+                    }
+                }
+                // adding at end of array
+                if (!found) {
+                    node.keyValues[node.size] = entry;
+                }
                 node.size++;
                 return null;
             }
@@ -167,7 +198,9 @@ class BPlusTree {
                 newChildEntry = new NewChildEntry(leaf2.keyValues[0], leaf2);
                 node.size = t;
                 leaf2.size = tmp.length - t;
+                BPlusTreeNode tmp2 = node.next;
                 node.next = leaf2;
+                leaf2.next = tmp2;
 
                 // If root node was just split, revise tree
                 if (node == root) {
@@ -460,6 +493,11 @@ class BPlusTree {
                         parent.children[j-1].next = null;
                         // delete parent key and pointer, update arrays
                         for (int g = j-1; g<parent.size; g++) {
+                            if (g == parent.size-1) {
+                                parent.keyValues[g] = null;
+                                parent.children[g+1] = null;
+                                break;
+                            }
                             parent.keyValues[g] = parent.keyValues[g+1];
                             parent.children[g+1] = parent.children[g+2];
                         }
@@ -488,6 +526,7 @@ class BPlusTree {
                             parent.keyValues[j] = parent.children[j+1].keyValues[0];
                         }
                         oldchildentry = null;
+                        return oldchildentry;
                     }
                     // merge
                     else {
@@ -508,6 +547,11 @@ class BPlusTree {
                         }
                         // delete parent key and pointer, update arrays
                         for (int g = j; g<parent.size; g++) {
+                            if (g == parent.size-1) {
+                                parent.keyValues[g] = null;
+                                parent.children[g+1] = null;
+                                break;
+                            }
                             parent.keyValues[g] = parent.keyValues[g+1];
                             parent.children[g+1] = parent.children[g+2];
                         }
@@ -526,8 +570,18 @@ class BPlusTree {
      * @return whether deletion was successful
      */
     boolean delete(long studentId) {
+        /*
+         * TODO:
+         * Implement this function to delete in the B+Tree.
+         * Also, delete in student.csv after deleting in B+Tree, if it exists.
+         * Return true if the student is deleted successfully otherwise, return false.
+         */
+
         // cant delete here
         if (this.root == null) {
+            return false;
+        }
+        if (search(studentId) == -1) {
             return false;
         }
         else {

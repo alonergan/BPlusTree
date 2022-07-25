@@ -4,6 +4,8 @@ out/
 !**/src/test/**/out/
 
 *.class
+*.txt
+*.csv
 
 ### Eclipse ###
 .apt_generated
