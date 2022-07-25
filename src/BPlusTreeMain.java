@@ -17,8 +17,8 @@ public class BPlusTreeMain {
         Scanner scan = null;
         File csvFile = null;
         try {
-            csvFile = new File("../Student.csv");
-            scan = new Scanner(new File("../input.txt"));
+            csvFile = new File("Student_test.csv");
+            scan = new Scanner(new File("input_test.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
@@ -40,14 +40,11 @@ public class BPlusTreeMain {
 
         /** Start reading the operations now from input file*/
         try {
-            int i = 0;
             while (scan.hasNextLine()) {
                 Scanner s2 = new Scanner(scan.nextLine());
                 while (s2.hasNext()) {
 
                     String operation = s2.next();
-                    System.out.println(operation + " " + i);
-                    i ++;
 
                     switch (operation) {
                         case "insert": {

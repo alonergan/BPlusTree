@@ -134,7 +134,7 @@ class BPlusTree {
                    // node2.numChildren++;
                     // Sort new node
                     node2.sortNode();
-                    newChildEntry = new newChildEntry(tmp.keyValues[t], node2);
+                    newChildEntry = new NewChildEntry(tmp.keyValues[t], node2);
                     // If root node was just split, revise tree
                     if (node == root) {
                         BPlusTreeNode newRoot = new BPlusTreeNode(t, false); // Create new root and set values
@@ -161,7 +161,7 @@ class BPlusTree {
             if (node.size < this.max) {
                 boolean found = false;
                 for (int i = 0; i< node.size; i++) {
-                    if (entry.key < node.keyValues[i].key && found == false) {
+                    if (entry.key < node.keyValues[i].key && !found) {
                         found = true;
 
                         // make space in node
@@ -244,7 +244,7 @@ class BPlusTree {
      * @param parent the parent of the current node
      * @param current the current node
      * @param studentId the studentID we wish to delete
-     * @param oldchildentry
+     * @param oldchildentry the old entry to merge
      * @return oldchildentry; if not null, merge or redistribute with sibling node
      */
     private BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
@@ -566,7 +566,7 @@ class BPlusTree {
 
     /**
      * Delete a key/value pair corresponding to the StudentID, if it exists
-     * @param studentId
+     * @param studentId the student's ID (key value)
      * @return whether deletion was successful
      */
     boolean delete(long studentId) {
