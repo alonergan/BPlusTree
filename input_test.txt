@@ -1,7 +1,39 @@
 3
-delete 10
-delete 250
-delete 990
-delete 11
-delete 13
-
+insert 10 asdf asdf sociology FR 20 1
+insert 11 asdf asdf sociology FR 20 2
+insert 13 asdf asdf sociology FR 20 3
+insert 25 asdf asdf sociology FR 20 4
+insert 74 asdf asdf sociology FR 20 5
+insert 81 asdf asdf sociology FR 20 6
+insert 99 asdf asdf sociology FR 20 7
+insert 63 asdf asdf sociology FR 20 8
+insert 57 asdf asdf sociology FR 20 9
+insert 45 asdf asdf sociology FR 20 10
+insert 12 asdf asdf sociology FR 20 11
+insert 24 asdf asdf sociology FR 20 12
+insert 16 asdf asdf sociology FR 20 13
+insert 84 asdf asdf sociology FR 20 14
+insert 69 asdf asdf sociology FR 20 15
+insert 33 asdf asdf sociology FR 20 16
+insert 77 asdf asdf sociology FR 20 17
+insert 101 asdf asdf sociology FR 20 1
+insert 110 asdf asdf sociology FR 20 2
+insert 130 asdf asdf sociology FR 20 3
+insert 250 asdf asdf sociology FR 20 4
+insert 740 asdf asdf sociology FR 20 5
+insert 810 asdf asdf sociology FR 20 6
+insert 990 asdf asdf sociology FR 20 7
+insert 630 asdf asdf sociology FR 20 8
+insert 570 asdf asdf sociology FR 20 9
+insert 450 asdf asdf sociology FR 20 10
+insert 120 asdf asdf sociology FR 20 11
+insert 240 asdf asdf sociology FR 20 12
+insert 160 asdf asdf sociology FR 20 13
+insert 840 asdf asdf sociology FR 20 14
+insert 690 asdf asdf sociology FR 20 15
+insert 330 asdf asdf sociology FR 20 16
+insert 770 asdf asdf sociology FR 20 17
+search 84
+search 77
+delete 12
+search 10

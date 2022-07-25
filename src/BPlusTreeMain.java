@@ -15,8 +15,8 @@ public class BPlusTreeMain {
         Scanner scan = null;
         File csvFile = null;
         try {
-            csvFile = new File("../Student_test.csv");
-            scan = new Scanner(new File("../input_test.txt"));
+            csvFile = new File("../Student.csv");
+            scan = new Scanner(new File("../input.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
@@ -83,7 +83,6 @@ public class BPlusTreeMain {
                             removeFromCSV(csvFile, studentId);
                             studentsDB.removeIf(s -> (s.studentId == studentId));
                             totalStudents = studentsDB.size();
-                            System.out.print(bTree.print());
                             break;
                         }
                         case "search": {
