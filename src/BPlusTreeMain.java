@@ -15,8 +15,8 @@ public class BPlusTreeMain {
         Scanner scan = null;
         File csvFile = null;
         try {
-            csvFile = new File("../Student.csv");
-            scan = new Scanner(new File("../input.txt"));
+            csvFile = new File("../Student_test.csv");
+            scan = new Scanner(new File("../input_test.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
@@ -68,7 +68,6 @@ public class BPlusTreeMain {
                             totalStudents++;    // Increment
                             // Add to CSV
                             addToCSV(csvFile, s);
-
                             break;
                         }
                         case "delete": {
@@ -110,6 +109,8 @@ public class BPlusTreeMain {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //BREAKPOINT HERE
+        System.out.println("done");
     }
 
     private static List<Student> getStudents(File fp) {
@@ -140,15 +141,13 @@ public class BPlusTreeMain {
      */
     private static void addToCSV(File fp, Student s) {
         try {
-            FileWriter fw = new FileWriter(fp, false);
+            FileWriter fw = new FileWriter(fp, true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
-            Scanner scan = new Scanner(fp);
             pw.println(s.studentId + "," + s.studentName + "," + s.major + "," + s.level + "," + s.age + ","
                     + s.recordId);
             pw.flush();
             pw.close();
-            scan.close();
         }
         catch(IOException e) {
             e.printStackTrace();

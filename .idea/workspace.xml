@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="Finished modifying CSV and studentsDB">
+    <list default="true" id="7ab855d1-13bc-44d1-999f-97535032c603" name="Changes" comment="Ok back up to speed. I think the RecordID is just randomized">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Student_test.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input_test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input_test.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BPlusTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/main" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -31,6 +36,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Brando\IdeaProjects\BPlusTree" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Brando\IdeaProjects\BPlusTree" />
     </key>
   </component>
@@ -99,7 +107,42 @@
       <option name="project" value="LOCAL" />
       <updated>1658457799990</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length">
+      <created>1658461907459</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1658461907459</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added a sorting method. might need to add more calls to it; search is acting wonky">
+      <created>1658646033291</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1658646033291</updated>
+    </task>
+    <task id="LOCAL-00009" summary="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;">
+      <created>1658646444573</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1658646444573</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fixed methods writing to CSV(?)">
+      <created>1658646938691</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1658646938691</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Ok back up to speed. I think the RecordID is just randomized">
+      <created>1658647767119</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1658647767119</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -123,22 +166,38 @@
     <MESSAGE value="h" />
     <MESSAGE value="Added methods to modify CSV file" />
     <MESSAGE value="Finished modifying CSV and studentsDB" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished modifying CSV and studentsDB" />
+    <MESSAGE value="I started going through Delete method, added some comments and fixed a little syntax&#10;&#10;also, storing size and numchildren is convenient for English, but we'll have to see if there's some extra places we're forgetting to increment/decrement. Maybe it would be best to just use children.length, keyValues.length" />
+    <MESSAGE value="added a sorting method. might need to add more calls to it; search is acting wonky" />
+    <MESSAGE value="merged, fixing some conflicts. search back to saying &quot;student does not exist&quot;" />
+    <MESSAGE value="fixed methods writing to CSV(?)" />
+    <MESSAGE value="Ok back up to speed. I think the RecordID is just randomized" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ok back up to speed. I think the RecordID is just randomized" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
-          <line>139</line>
-          <option name="timeStamp" value="8" />
+          <line>95</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/BPlusTree.java</url>
-          <line>221</line>
-          <option name="timeStamp" value="13" />
+          <line>126</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/BPlusTreeMain.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="bTree.root.children[0].keyValues[0]" />
+        <watch expression="bTree.root.keyValues" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

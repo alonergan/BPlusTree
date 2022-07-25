@@ -28,7 +28,7 @@ class BPlusTree {
         this.max = 2 * t; // should this be 2 * t?
     }
 
-    long search(long studentId) {
+    public long search(long studentId) {
         /*
          * TODO:
          * Implement this function to search in the B+Tree.
@@ -71,7 +71,7 @@ class BPlusTree {
         return -1;
     }
 
-    newChildEntry insertHelper(BPlusTreeNode node, KVPair entry, newChildEntry newChildEntry) {
+    private newChildEntry insertHelper(BPlusTreeNode node, KVPair entry, newChildEntry newChildEntry) {
         // 1) If node is a non-leaf node (N)
         if (!node.leaf) {
             // Choose subtree and recursively call method
@@ -93,14 +93,31 @@ class BPlusTree {
                     node.children[node.numChildren] = newChildEntry.child;
                     node.numChildren++;
                     node.size++;
+                    node.sortNode();
                     return null;
                 }
                 // If no space in interior node, must split
                 else {
-                    BPlusTreeNode tmp = new BPlusTreeNode(t, true);     // Copy of array values
+                    BPlusTreeNode tmp = new BPlusTreeNode(t+1, true);     // Copy of array values
                     BPlusTreeNode node2 = new BPlusTreeNode(t, false);   // Right node of split node
                     System.arraycopy(node.keyValues, 0, tmp.keyValues, 0, node.keyValues.length); // Copy vals into tmp
                     System.arraycopy(node.children, 0, tmp.children, 0, node.children.length);
+                    boolean found = false;
+                    for (int p = 0; p< tmp.keyValues.length; p++) {
+                        if (found == false && newChildEntry.keyValue.key < tmp.keyValues[p].key) {
+                            found = true;
+                            // make space in tmp
+                            for(int j= node.keyValues.length; j> p; j--) {
+                                tmp.keyValues[j] = tmp.keyValues[j-1];
+                                tmp.children[j+1] = tmp.children[j];
+                            }
+                            // add new child entry
+                            tmp.keyValues[p] = newChildEntry.keyValue;
+                            tmp.children[p+1] = newChildEntry.child;
+                            // break
+                            break;
+                        }
+                    }
                     node.clearKeys(); // Clear current node
                     node.clearChildren();
 
@@ -110,19 +127,20 @@ class BPlusTree {
                     node.size = t;
                     node.numChildren = t+1;
 
+
                     // Fill right node
-                    System.arraycopy(tmp.keyValues, t, node2.keyValues, 0, tmp.keyValues.length - t); // Rest go into split node
-                    System.arraycopy(tmp.children, t + 1, node2.children, 0, tmp.children.length - (t + 1));
-                    node2.size = tmp.keyValues.length - t;
-                    node2.numChildren = tmp.children.length - (t+1);
-
+                    System.arraycopy(tmp.keyValues, t+1, node2.keyValues, 0, t); // Rest go into split node
+                    System.arraycopy(tmp.children, t + 1, node2.children, 0, t+1);
+                    node2.size = t;
+                    node2.numChildren = t+1;
                     // Add newChildEntry to parent
-                    node2.keyValues[node2.size] = newChildEntry.keyValue; // Add new key
-                    node2.children[node2.numChildren] = newChildEntry.child; // Add child reference
-                    node2.size++;
-                    node2.numChildren++;
-
-                    newChildEntry = new newChildEntry(node2.keyValues[0], node2);
+                   // node2.keyValues[node2.size] = newChildEntry.keyValue; // Add new key
+                   // node2.children[node2.numChildren] = newChildEntry.child; // Add child reference
+                   // node2.size++;
+                   // node2.numChildren++;
+                    // Sort new node
+                    node2.sortNode();
+                    newChildEntry = new newChildEntry(tmp.keyValues[t], node2);
                     // If root node was just split, revise tree
                     if (node == root) {
                         BPlusTreeNode newRoot = new BPlusTreeNode(t, false); // Create new root and set values
@@ -147,7 +165,25 @@ class BPlusTree {
             }
             // If node has space insert entry, set newChildEntry to null, return
             if (node.size < this.max) {
-                node.keyValues[node.size] = entry;
+                boolean found = false;
+                for (int i = 0; i< node.size; i++) {
+                    if (entry.key < node.keyValues[i].key && found == false) {
+                        found = true;
+
+                        // make space in node
+                        for(int j= node.size; j> i; j--) {
+                            node.keyValues[j] = node.keyValues[j-1];
+                        }
+
+                        node.keyValues[i] = entry;
+                        // break
+                        break;
+                    }
+                }
+                // adding at end of array
+                if (!found) {
+                    node.keyValues[node.size] = entry;
+                }
                 node.size++;
                 return null;
             }
@@ -157,13 +193,20 @@ class BPlusTree {
                 BPlusTreeNode leaf2 = new BPlusTreeNode(t, true);   // Right node of split leaf
                 System.arraycopy(node.keyValues, 0, tmp, 0, node.keyValues.length); // Copy vals into tmp
                 tmp[max] = entry; // Add new entry before split
+                /* Shouldn't have any issues with NullPointerException from CompareTo override method*/
+                Arrays.sort(tmp, (a, b) -> {
+                    if (a.key < b.key) return -1;
+                    else return 1;
+                });
                 node.clearKeys(); // Clear current node
                 System.arraycopy(tmp, 0, node.keyValues, 0, t); // First t entries stay
                 System.arraycopy(tmp, t, leaf2.keyValues, 0, tmp.length - t); // Rest go into split node
                 newChildEntry = new newChildEntry(leaf2.keyValues[0], leaf2);
                 node.size = t;
                 leaf2.size = tmp.length - t;
+                BPlusTreeNode tmp2 = node.next;
                 node.next = leaf2;
+                leaf2.next = tmp2;
 
                 // If root node was just split, revise tree
                 if (node == root) {
@@ -180,14 +223,14 @@ class BPlusTree {
         }
     }
 
-    BPlusTree insert(Student student) {
+    public BPlusTree insert(Student student) {
         KVPair entry = new KVPair(student.studentId, student.recordId);
         // If root is null, create first node in tree
-        if (root == null) {
+        if (this.root == null) {
             BPlusTreeNode node = new BPlusTreeNode(t, true);
             node.keyValues[0] = entry;
             node.size++;
-            root = node;
+            this.root = node;
             return this;
         }
         // Else call recursive function
@@ -197,7 +240,7 @@ class BPlusTree {
         return this;
     }
 
-    BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
+    private BPlusTreeNode deleteHelper(BPlusTreeNode parent, BPlusTreeNode current, long studentId, BPlusTreeNode oldchildentry) {
         
         // if node pointer is a non leaf 
         if (!current.leaf) {
@@ -221,10 +264,8 @@ class BPlusTree {
 
                 // current.children array is updated here
                 for (i = 0; i< current.numChildren; i++) {
-                    if (current.children[i] != null) {
-                        if (current.children[i] == oldchildentry) {
-                            found = true;
-                        }
+                    if (current.children[i] == oldchildentry) {
+                        found = true;
                     }
                     // edge case: deleting last entry/child in array
                     if (i == current.numChildren-1) {
@@ -393,10 +434,8 @@ class BPlusTree {
             // remove entry
             boolean found = false;
             for (i = 0; i< current.size; i++) {
-                if (current.keyValues[i] != null) {
-                    if (current.keyValues[i].key == studentId) {
-                        found = true;
-                    }
+                if (current.keyValues[i].key == studentId) {
+                    found = true;
                 }
                 // edge case: deleting last entry/child in array
                 if (i == current.size-1) {
@@ -454,13 +493,13 @@ class BPlusTree {
                         }
                         // adjust sibling pointers (should be null now as current is end node)
                         parent.children[j-1].next = null;
-                        parent.size--;
-                        parent.numChildren--;
                         // delete parent key and pointer, update arrays
                         for (int g = j-1; g<parent.size; g++) {
                             parent.keyValues[g] = parent.keyValues[g+1];
                             parent.children[g+1] = parent.children[g+2];
                         }
+                        parent.size--;
+                        parent.numChildren--;
                         return oldchildentry;
                     }
                 }
@@ -504,13 +543,13 @@ class BPlusTree {
                         else {
                             current.next = parent.children[j+2];
                         }
-                        parent.size--;
-                        parent.numChildren--;
                         // delete parent key and pointer, update arrays
                         for (int g = j; g<parent.size; g++) {
                             parent.keyValues[g] = parent.keyValues[g+1];
                             parent.children[g+1] = parent.children[g+2];
                         }
+                        parent.size--;
+                        parent.numChildren--;
                         return oldchildentry;
                     }
                 }
@@ -528,9 +567,6 @@ class BPlusTree {
 
         // cant delete here
         if (this.root == null) {
-            return false;
-        }
-        if (search(studentId) == -1) {
             return false;
         }
         else {
