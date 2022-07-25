@@ -67,7 +67,6 @@ class BPlusTree {
                 }
             }
         }
-//        System.out.println("studentID: " + studentId + " was not found in the tree");
         return -1;
     }
 
@@ -83,13 +82,13 @@ class BPlusTree {
         // 1) If node is a non-leaf node (N)
         if (!node.leaf) {
             // Choose subtree and recursively call method
-            int i = 1;
-            while (i < node.size && entry.key >= node.keyValues[i - 1].key) {
+            int i = 0;
+            while (i < node.size && entry.key >= node.keyValues[i].key) {
                 i++;
             }
-            newChildEntry = insertHelper(node.children[i - 1], entry, newChildEntry);
+            newChildEntry = insertHelper(node.children[i], entry, newChildEntry);
 
-            // Didn't split child return
+            // Didn't split child; return
             if (newChildEntry == null) {
                 return null;
             }
@@ -131,8 +130,8 @@ class BPlusTree {
                     node2.children[node2.numChildren] = newChildEntry.child; // Add child reference
                     node2.size++;
                     node2.numChildren++;
-                    // Sort new node ?
-                    // node2.sortNode();
+//                   Sort new node here?
+                     node2.sortNode();
                     newChildEntry = new NewChildEntry(node2.keyValues[0], node2);
                     // If root node was just split, revise tree
                     if (node == root) {
@@ -143,6 +142,7 @@ class BPlusTree {
                         newRoot.numChildren = 2;
                         newRoot.size = 1;
                         this.root = newRoot;
+                        this.root.sortNode();
                     }
                     return newChildEntry;
                 }

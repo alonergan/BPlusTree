@@ -39,13 +39,14 @@ public class BPlusTreeMain {
 
         /** Start reading the operations now from input file*/
         try {
+            int i = 0;
             while (scan.hasNextLine()) {
                 Scanner s2 = new Scanner(scan.nextLine());
-
                 while (s2.hasNext()) {
 
                     String operation = s2.next();
-                    System.out.println(operation);
+                    System.out.println(operation + " " + i);
+                    i ++;
 
                     switch (operation) {
                         case "insert": {
