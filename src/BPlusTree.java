@@ -569,6 +569,9 @@ class BPlusTree {
         if (this.root == null) {
             return false;
         }
+        if (search(studentId) == -1) {
+            return false;
+        }
         else {
             deleteHelper(null, this.root, studentId, null);
         }

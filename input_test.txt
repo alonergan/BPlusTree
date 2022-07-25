@@ -1,3 +1,7 @@
 3
-
+delete 10
+delete 250
+delete 990
+delete 11
+delete 13
 

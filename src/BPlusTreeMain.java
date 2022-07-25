@@ -83,6 +83,7 @@ public class BPlusTreeMain {
                             removeFromCSV(csvFile, studentId);
                             studentsDB.removeIf(s -> (s.studentId == studentId));
                             totalStudents = studentsDB.size();
+                            System.out.print(bTree.print());
                             break;
                         }
                         case "search": {
